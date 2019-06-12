@@ -1,0 +1,29 @@
+.block-board {
+    width: 50%;
+    height: 80%;
+    margin: 0 auto;
+    background-color: #34495e;
+    color: #fff;
+    border: 6px solid #2c3e50;
+    border-radius: 10px;
+    display: grid;
+    grid-template: repeat(20, 1fr) / repeat(10, 1fr);
+}
+
+.block-full, .block-empty {
+    border: 3pt solid #2c3e50;
+    border-radius: 1pt;
+    font-family: Helvetica;
+    font-size: 13pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.block-full {
+    background-color: blue;
+}
+
+.block-empty {
+    background-color: aqua;
+}

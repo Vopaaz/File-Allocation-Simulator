@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Contiguous Simulation</title>
+    <link rel="stylesheet" href="../assets/css/file-block.css">
+    <link rel="stylesheet" href="../assets/css/global.css">
+</head>
+
+<body>
+
+    <h2>Contiguous Simulation</h2>
+
+    <div class="block-board">
+        <script> for (let index = 0; index < 200; index++) {
+                document.write('<div class="block-empty" id="block-' + index + '"> ' + index + '</div>');
+            } </script>
+    </div>
+
+    <button class="control-button" id="step">Step</button>
+    <button class="control-button" id="auto">Auto</button>
+    <button class="control-button" id="input">Select DataFile</button>
+
+    <script type="text/javascript">
+        require("../renderer/contiguous.js")
+    </script>
+
+</body>
+
+</html>

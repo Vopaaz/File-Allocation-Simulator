@@ -14,6 +14,9 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   // and load the index.html of the app.
@@ -55,3 +58,9 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+const path = require('path')
+const glob = require('glob')
+
+const files = glob.sync(path.join(__dirname, 'main/*.js'))
+files.forEach((file) => { require(file) })

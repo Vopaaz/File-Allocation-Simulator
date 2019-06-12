@@ -2,7 +2,7 @@
   "name": "file-allocation-simulator",
   "productName": "file-allocation-simulator",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "File allocation simulator for course project of CSA, Prof. Mao, Tsinghua SEM",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -11,7 +11,7 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
-  "keywords": [],
+  "keywords": ["Operating System", "File Allocation"],
   "author": "Vopaaz",
   "license": "MIT",
   "config": {
