@@ -1,19 +1,75 @@
 const { ipcRenderer } = require('electron')
 
-function changeBlockStatus(block) {
-    if (block.getAttribute("class") == "block-full") {
-        block.setAttribute("class", "block-empty")
+function BlockManager() {
+    let bm = {
+        getBlockById: function (id) {
+            return document.getElementById('block-' + String(id))
+        },
+
+        setBlockFull: function (block) {
+            block.setAttribute("class", "block-full")
+        },
+
+        setBlockEmpty: function (block) {
+            block.setAttribute("class", "block-empty")
+        },
+
+        blockIsFull: function (block) {
+            return block.getAttribute("class") == "block-full"
+        },
+
+        blockIsEmpty: function (block) {
+            return block.getAttribute("class") == "block-empty"
+        },
+
+        setBlockFullById: function (id) {
+            this.setBlockFull(this.getBlockById(id))
+        },
+
+        setBlockEmptyById: function (id) {
+            this.setBlockEmpty(this.getBlockById(id))
+        },
+
+        blockIsFullById: function (id) {
+            return this.blockIsFull(this.getBlockById(id))
+        },
+
+        blockIsEmptyById: function (id) {
+            return this.blockIsEmpty(this.getBlockById(id))
+        },
+
+        changeBlockStatus: function (block) {
+            if (this.blockIsFull(block)) {
+                this.setBlockEmpty(block)
+            }
+            else if (this.blockIsEmpty(block)) {
+                this.setBlockFull(block)
+            }
+        },
+
+        changeBlockStatusById: function (id) {
+            let block = this.getBlockById(id)
+            this.changeBlockStatus(block)
+        }
     }
-    else {
-        block.setAttribute("class", "block-full")
-    }
+    return bm
 }
 
-function inputInit() {
-    const inputBtn = document.getElementById('input')
 
+function initEverything() {
+    window.instructionInited = false
+
+    const inputBtn = document.getElementById('input')
     inputBtn.addEventListener('click', (event) => {
         ipcRenderer.send('open-file-dialog')
+    })
+
+    ipcRenderer.on('selected-file', (event, content) => {
+        let parser = InstructionParser(content)
+        window.instructions = parser.instructions
+        window.totalInstructions = window.instructions.length
+        window.toExecInstructionId = 0
+        window.instructionInited = true
     })
 }
 
@@ -61,14 +117,14 @@ function Instruction(contentLine) {
         return instruction
     }
     else {
-        console.log("Invalid Data line.")
+        console.log("Invalid Data line: '" + contentLine + "'")
         return null
     }
 
 }
 
 module.exports = {
-    "changeBlockStatus": changeBlockStatus,
     "InstructionParser": InstructionParser,
-    "inputInit": inputInit
+    "initEverything": initEverything,
+    "BlockManager": BlockManager
 }
