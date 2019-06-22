@@ -4,8 +4,8 @@ const path = require('path')
 
 const size = screen.getPrimaryDisplay().size
 const newContSimBtn = document.getElementById('new-contiguous-simulation')
-const win_width = Math.floor(size.width * 0.9)
-const win_height = Math.floor(size.height * 0.9)
+const win_width = Math.floor(size.width)
+const win_height = Math.floor(size.height)
 
 newContSimBtn.addEventListener('click', (event) => {
     const htmlPath = path.join('file://', __dirname, '../simulations/contiguous.html')

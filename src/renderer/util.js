@@ -70,7 +70,30 @@ function initEverything() {
         window.totalInstructions = window.instructions.length
         window.toExecInstructionId = 0
         window.instructionInited = true
+
+        renderRawInstructionTable()
     })
+}
+
+function renderRawInstructionTable() {
+    function tdWrapper(content) {
+        return "<td>" + content + "</td>"
+    }
+
+    tablecontent = "<table>"
+    tablecontent += "<tr><th>Directory</th><th>Filename</th><th>Block</th><th>Oprand</th></tr>"
+    for (const instruction of window.instructions) {
+        tablecontent += "<tr>"
+        tablecontent += tdWrapper(instruction.directory)
+        tablecontent += tdWrapper(instruction.fileName)
+        tablecontent += tdWrapper(instruction.block)
+        tablecontent += tdWrapper(instruction.oprand)
+        tablecontent += "</tr>"
+    }
+    tablecontent += "</table>"
+
+    let div = document.getElementById("raw-instructions")
+    div.innerHTML = tablecontent
 }
 
 function InstructionParser(content) {

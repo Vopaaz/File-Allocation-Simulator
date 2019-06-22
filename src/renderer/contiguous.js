@@ -7,10 +7,14 @@ const stepButton = document.getElementById('step')
 stepButton.addEventListener('click', (event) => {
     bm = BlockManager()
     if (window.instructionInited) {
-        instruction = window.instructions[window.toExecInstructionId]
-        
+        if (window.toExecInstructionId < window.totalInstructions) {
+            instruction = window.instructions[window.toExecInstructionId++]
+        }
+        else{
+            alert("All instructions are executed.")
+        }
     }
     else {
-        alert("Instructions Data Not Initialized.")
+        alert("Instructions data not initialized.")
     }
 })
