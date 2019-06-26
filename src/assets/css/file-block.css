@@ -3,7 +3,7 @@
     height: 80%;
     margin: 0 auto;
     background-color: #34495e;
-    color: #fff;
+    color: rgba(40, 43, 92, 0.8);
     border: 6px solid #2c3e50;
     border-radius: 10px;
     display: grid;
@@ -20,10 +20,7 @@
     align-items: center;
 }
 
-.block-full {
-    background-color: blue;
-}
 
 .block-empty {
-    background-color: aqua;
+    background-color: white;
 }

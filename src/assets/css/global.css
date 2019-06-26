@@ -18,14 +18,17 @@ h1, h2 {
     border: 5px;
 }
 
-.above-section{
-    height: 70%;
-    float: above;
+.raw-instructions-display{
+    height: 40%;
     overflow: auto;
 }
 
-.below-section{
-    height: 25%;
-    float: below;
+.file-information-table{
+    height: 40%;
+    overflow: auto;
+}
+
+.execution-message{
+    height: 20%;
     overflow: auto;
 }

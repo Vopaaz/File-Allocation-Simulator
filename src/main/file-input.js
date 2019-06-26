@@ -1,3 +1,5 @@
+'use strict';
+
 const { ipcMain, dialog } = require('electron')
 const fs = require('fs')
 

@@ -1,17 +1,51 @@
+'use strict';
+
 const { ipcRenderer } = require('electron')
 
 function BlockManager() {
+    function randColor() {
+        let r = Math.random() * 200 + 55
+        let g = Math.random() * 200 + 55
+        let b = Math.random() * 200 + 55
+        return `rgba(${r},${g},${b},0.7)`
+    }
+
     let bm = {
+
         getBlockById: function (id) {
             return document.getElementById('block-' + String(id))
         },
 
+        getBlocksByIdList: function (idList) {
+            let blockList = []
+            for (const id of idList) {
+                blockList.push(this.getBlockById(id))
+            }
+            return blockList
+        },
+
         setBlockFull: function (block) {
+            block.style.backgroundColor = randColor()
             block.setAttribute("class", "block-full")
         },
 
+        setBlocksFull: function (blockList) {
+            let color = randColor()
+            blockList.forEach(block => {
+                block.style.backgroundColor = color
+                block.setAttribute("class", "block-full")
+            });
+        },
+
         setBlockEmpty: function (block) {
+            block.style.backgroundColor = "white"
             block.setAttribute("class", "block-empty")
+        },
+
+        setBlocksEmpty: function (blockList) {
+            blockList.forEach(block => {
+                this.setBlockEmpty(block)
+            })
         },
 
         blockIsFull: function (block) {
@@ -22,12 +56,50 @@ function BlockManager() {
             return block.getAttribute("class") == "block-empty"
         },
 
+        blocksAllFull: function (blockList) {
+            for (const block of blockList) {
+                if (this.blockIsEmpty(block)) {
+                    return false
+                }
+            }
+            return true
+        },
+
+        blocksAllEmpty: function (blockList) {
+            for (const block of blockList) {
+                if (this.blockIsFull(block)) {
+                    return false
+                }
+            }
+            return true
+        },
+
+        blocksAllFullById: function (idList) {
+            let blockList = this.getBlocksByIdList(idList)
+            return this.blocksAllFull(blockList)
+        },
+
+        blocksAllEmptyById: function (idList) {
+            let blockList = this.getBlocksByIdList(idList)
+            return this.blocksAllEmpty(blockList)
+        },
+
         setBlockFullById: function (id) {
             this.setBlockFull(this.getBlockById(id))
         },
 
+        setBlocksFullByIdList: function (idList) {
+            let blockList = this.getBlocksByIdList(idList)
+            this.setBlocksFull(blockList)
+        },
+
         setBlockEmptyById: function (id) {
             this.setBlockEmpty(this.getBlockById(id))
+        },
+
+        setBlocksEmptyByIdList: function (idList) {
+            let blockList = this.getBlocksByIdList(idList)
+            this.setBlocksEmpty(blockList)
         },
 
         blockIsFullById: function (id) {
@@ -37,20 +109,6 @@ function BlockManager() {
         blockIsEmptyById: function (id) {
             return this.blockIsEmpty(this.getBlockById(id))
         },
-
-        changeBlockStatus: function (block) {
-            if (this.blockIsFull(block)) {
-                this.setBlockEmpty(block)
-            }
-            else if (this.blockIsEmpty(block)) {
-                this.setBlockFull(block)
-            }
-        },
-
-        changeBlockStatusById: function (id) {
-            let block = this.getBlockById(id)
-            this.changeBlockStatus(block)
-        }
     }
     return bm
 }
@@ -76,9 +134,16 @@ function initEverything() {
             renderMessage("Instructions are loaded.")
         }
         catch (error) {
+            window.instructionInited = false
+            clearRawInstructionTable()
             renderMessage(error)
         }
     })
+}
+
+function clearRawInstructionTable() {
+    let div = document.getElementById("raw-instructions")
+    div.innerHTML = ""
 }
 
 function renderRawInstructionTable() {
@@ -86,7 +151,7 @@ function renderRawInstructionTable() {
         return "<td>" + content + "</td>"
     }
 
-    tablecontent = "<table>"
+    let tablecontent = "<table>"
     tablecontent += "<tr><th>Directory</th><th>Filename</th><th>Block</th><th>Oprand</th></tr>"
     for (const instruction of window.instructions) {
         tablecontent += "<tr>"
@@ -103,8 +168,8 @@ function renderRawInstructionTable() {
 }
 
 function InstructionParser(content) {
-    lines = content.split("\n")
-    instructions = []
+    let lines = content.split("\n")
+    let instructions = []
 
     for (const line of lines) {
         if (line != "") {
@@ -122,7 +187,7 @@ function InstructionParser(content) {
 }
 
 
-function Instruction(contentLine) {
+function Instruction(rawContentLine) {
     function charNumInString(string, char) {
         let count = 0
         for (const str_char of string) {
@@ -142,8 +207,10 @@ function Instruction(contentLine) {
         return false
     }
 
+    let contentLine = rawContentLine.trim()
+
     if (charNumInString(contentLine, ",") != 3) {
-        throw "Invalid instruction in '" + contentLine + "'. \nThe commas(separators) in the instruction data file are not placed properly."
+        throw "Invalid instruction: '" + contentLine + "'. \nThe commas(separators) in the instruction data file are not placed properly."
     }
 
     let arr = contentLine.split(",")
@@ -158,21 +225,39 @@ function Instruction(contentLine) {
             oprand: arr[3].trim()
         }
     } catch (error) {
-        throw "Invalid instruction in '" + contentLine + "'."
+        throw "Invalid instruction: '" + contentLine + "'."
     }
 
     if (isNaN(instruction.block) && instruction.oprand != "D") {
-        throw "Invalid instruction in '" + contentLine + "'. \nThe block field is not a valid integer."
+        throw "Invalid instruction: '" + contentLine + "'. \nThe block field is not a valid integer."
     }
 
     if (!inArray(["C", "R", "W", "D"], instruction.oprand)) {
-        throw "Invalid instruction in '" + contentLine + "'. \nThe oprand must be C, R, W, or D."
+        throw "Invalid instruction: '" + contentLine + "'. \nThe oprand must be C, R, W, or D."
     }
 
     return instruction
 
 }
 
+function InfoTableManager(headTitleList) {
+    let tableContainer = document.getElementById("info-table")
+    let table = document.createElement("table")
+    tableContainer.appendChild(table)
+    let headRow = document.createElement("tr")
+    headTitleList.forEach(headTitle => {
+        let headElement = document.createElement("th")
+        headElement.innerText = headTitle
+        headRow.appendChild(headElement)
+    });
+    table.appendChild(headRow)
+
+    let itm = {
+        something: 0
+    }
+
+    return itm
+}
 
 
 function renderMessage(message) {
@@ -183,5 +268,6 @@ module.exports = {
     "InstructionParser": InstructionParser,
     "initEverything": initEverything,
     "BlockManager": BlockManager,
-    "renderMessage": renderMessage
+    "renderMessage": renderMessage,
+    "InfoTableManager": InfoTableManager
 }
