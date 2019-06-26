@@ -4,14 +4,28 @@ h1, h2 {
 }
 
 .left-section {
-    width: 75%;
-    height: 100%;
+    width: 65%;
+    height: 800px;
     border-right: 1px solid;
     float: left;
 }
 
 .right-section {
-    width: 20%;
-    height: 100%;
+    width: 30%;
+    height: 800px;
     float: right;
+    padding: 15px;
+    border: 5px;
+}
+
+.above-section{
+    height: 70%;
+    float: above;
+    overflow: auto;
+}
+
+.below-section{
+    height: 25%;
+    float: below;
+    overflow: auto;
 }

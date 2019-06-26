@@ -1,4 +1,4 @@
-const { BlockManager, initEverything } = require('./util.js')
+const { BlockManager, initEverything, renderMessage } = require('./util.js')
 
 initEverything()
 
@@ -9,12 +9,13 @@ stepButton.addEventListener('click', (event) => {
     if (window.instructionInited) {
         if (window.toExecInstructionId < window.totalInstructions) {
             instruction = window.instructions[window.toExecInstructionId++]
+            renderMessage("Executing instruction "+String(window.toExecInstructionId))
         }
-        else{
-            alert("All instructions are executed.")
+        else {
+            renderMessage("All instructions are executed.")
         }
     }
     else {
-        alert("Instructions data not initialized.")
+        renderMessage("Instructions data not initialized.")
     }
 })

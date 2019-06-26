@@ -65,13 +65,19 @@ function initEverything() {
     })
 
     ipcRenderer.on('selected-file', (event, content) => {
-        let parser = InstructionParser(content)
-        window.instructions = parser.instructions
-        window.totalInstructions = window.instructions.length
-        window.toExecInstructionId = 0
-        window.instructionInited = true
+        try {
+            let parser = InstructionParser(content)
+            window.instructions = parser.instructions
+            window.totalInstructions = window.instructions.length
+            window.toExecInstructionId = 0
+            window.instructionInited = true
 
-        renderRawInstructionTable()
+            renderRawInstructionTable()
+            renderMessage("Instructions are loaded.")
+        }
+        catch (error) {
+            renderMessage(error)
+        }
     })
 }
 
@@ -101,9 +107,11 @@ function InstructionParser(content) {
     instructions = []
 
     for (const line of lines) {
-        let instruction = Instruction(line)
-        if (instruction) {
-            instructions.push(instruction)
+        if (line != "") {
+            let instruction = Instruction(line)
+            if (instruction) {
+                instructions.push(instruction)
+            }
         }
     }
 
@@ -125,29 +133,55 @@ function Instruction(contentLine) {
         return count
     }
 
-    function lineIsValid(line) {
-        return charNumInString(line, ",") == 3
+    function inArray(array, item) {
+        for (const arrayItem of array) {
+            if (arrayItem == item) {
+                return true
+            }
+        }
+        return false
     }
 
-    if (lineIsValid(contentLine)) {
-        let arr = contentLine.split(",")
-        let instruction = {
+    if (charNumInString(contentLine, ",") != 3) {
+        throw "Invalid instruction in '" + contentLine + "'. \nThe commas(separators) in the instruction data file are not placed properly."
+    }
+
+    let arr = contentLine.split(",")
+
+    let instruction
+
+    try {
+        instruction = {
             directory: arr[0].trim(),
             fileName: arr[1].trim(),
             block: parseInt(arr[2].trim()),
             oprand: arr[3].trim()
         }
-        return instruction
-    }
-    else {
-        console.log("Invalid Data line: '" + contentLine + "'")
-        return null
+    } catch (error) {
+        throw "Invalid instruction in '" + contentLine + "'."
     }
 
+    if (isNaN(instruction.block) && instruction.oprand != "D") {
+        throw "Invalid instruction in '" + contentLine + "'. \nThe block field is not a valid integer."
+    }
+
+    if (!inArray(["C", "R", "W", "D"], instruction.oprand)) {
+        throw "Invalid instruction in '" + contentLine + "'. \nThe oprand must be C, R, W, or D."
+    }
+
+    return instruction
+
+}
+
+
+
+function renderMessage(message) {
+    document.getElementById("messages").innerText = message;
 }
 
 module.exports = {
     "InstructionParser": InstructionParser,
     "initEverything": initEverything,
-    "BlockManager": BlockManager
+    "BlockManager": BlockManager,
+    "renderMessage": renderMessage
 }
