@@ -4,9 +4,9 @@ const { ipcRenderer } = require('electron')
 
 function BlockManager() {
     function randColor() {
-        let r = Math.random() * 200 + 55
-        let g = Math.random() * 200 + 55
-        let b = Math.random() * 200 + 55
+        let r = Math.random() * 180 + 60
+        let g = Math.random() * 180 + 60
+        let b = Math.random() * 180 + 60
         return `rgba(${r},${g},${b},0.7)`
     }
 
@@ -113,8 +113,7 @@ function BlockManager() {
     return bm
 }
 
-
-function initEverything() {
+function initGeneralEnvironment() {
     window.instructionInited = false
 
     const inputBtn = document.getElementById('input')
@@ -186,7 +185,6 @@ function InstructionParser(content) {
     return parser
 }
 
-
 function Instruction(rawContentLine) {
     function charNumInString(string, char) {
         let count = 0
@@ -240,25 +238,60 @@ function Instruction(rawContentLine) {
 
 }
 
-function InfoTableManager(headTitleList) {
-    let tableContainer = document.getElementById("info-table")
-    let table = document.createElement("table")
-    tableContainer.appendChild(table)
-    let headRow = document.createElement("tr")
-    headTitleList.forEach(headTitle => {
-        let headElement = document.createElement("th")
-        headElement.innerText = headTitle
-        headRow.appendChild(headElement)
-    });
-    table.appendChild(headRow)
+function DirectoryTable(headTitleList) {
+    let dt = {
 
-    let itm = {
-        something: 0
+        headTitleList: headTitleList,
+        cellArray: [],
+
+        toHtml: function () {
+            let tableElement = document.createElement("table")
+            let headRowTrElement = document.createElement("tr")
+            this.headTitleList.forEach(headTitle => {
+                let headElement = document.createElement("th")
+                headElement.innerText = headTitle
+                headRowTrElement.appendChild(headElement)
+            });
+            tableElement.appendChild(headRowTrElement)
+
+            if (this.cellArray.length != 0) {
+                this.cellArray.forEach(row => {
+                    let lineTrElement = document.createElement("tr")
+                    row.forEach(cell => {
+                        let cellTdElement = document.createElement("td")
+                        cellTdElement.innerText = cell
+                        lineTrElement.appendChild(cellTdElement)
+                    });
+                    tableElement.appendChild(lineTrElement)
+                });
+            }
+            return tableElement
+        },
+
+        push: function(contentList){
+            if(contentList.length == headTitleList.length){
+            this.cellArray.push(contentList)}
+            else{
+                throw "Internal Error, directory table received push request whose array length is inconsistant with the head"
+            }
+        },
+
+        renderToDirectoryView: function () {
+            let main = document.getElementById("directory-table")
+            main.appendChild(this.toHtml())
+        },
+
+        renderToBlock: function (block) {
+            block.addEventListener("click", (event) => {
+                this.renderToDirectoryView()
+            })
+        },
+
+        renderToBlockById: function (id) { this.renderToBlock(BlockManager().getBlockById(id)) }
     }
 
-    return itm
+    return dt
 }
-
 
 function renderMessage(message) {
     document.getElementById("messages").innerText = message;
@@ -266,8 +299,8 @@ function renderMessage(message) {
 
 module.exports = {
     "InstructionParser": InstructionParser,
-    "initEverything": initEverything,
+    "initGeneralEnvironment": initGeneralEnvironment,
     "BlockManager": BlockManager,
     "renderMessage": renderMessage,
-    "InfoTableManager": InfoTableManager
+    "DirectoryTable": DirectoryTable
 }

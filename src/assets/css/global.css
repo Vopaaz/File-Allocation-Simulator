@@ -19,7 +19,7 @@ h1, h2 {
 }
 
 .raw-instructions-display{
-    height: 40%;
+    height: 30%;
     overflow: auto;
 }
 
@@ -29,6 +29,6 @@ h1, h2 {
 }
 
 .execution-message{
-    height: 20%;
+    height: 30%;
     overflow: auto;
 }

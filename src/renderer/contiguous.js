@@ -1,10 +1,15 @@
 'use strict';
 
-const { BlockManager, initEverything, renderMessage, InfoTableManager } = require('./util.js')
+const { BlockManager, initGeneralEnvironment, renderMessage, DirectoryTable } = require('./util.js')
 
-initEverything()
+initGeneralEnvironment()
 
-var itm = InfoTableManager(["file", "start", "length"])
+var tableHead = ["File", "Start", "Length"]
+
+window.mainDirTable = DirectoryTable(tableHead)
+window.mainDirTable.push(["3", "4", "5"])
+window.mainDirTable.renderToDirectoryView()
+
 
 const stepButton = document.getElementById('step')
 
