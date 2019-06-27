@@ -109,6 +109,49 @@ function BlockManager() {
         blockIsEmptyById: function (id) {
             return this.blockIsEmpty(this.getBlockById(id))
         },
+
+        getOneEmptyBlock: function () {
+            let id = this.getOneEmptyBlockId()
+            if (id) {
+                return this.getBlockById(id)
+            } else {
+                throw "All blocks are already full."
+            }
+        },
+
+        getOneEmptyBlockId: function () {
+            for (let index = 0; index < 200; index++) {
+                if (this.blockIsEmptyById(index)) {
+                    return index
+                }
+            }
+            throw "All blocks are already full."
+        },
+
+        getNumbersContinuousBlocksId: function (number) {
+            for (let start = 0; start < 200; start++) {
+                if (this.blockIsFullById(start)) {
+                    continue
+                }
+                let arr = [start]
+                for (let end = start + 1; (end < start + number) && (end < 200); end++) {
+                    if (this.blockIsEmptyById(end)) {
+                        arr.push(end)
+                    } else {
+                        break
+                    }
+                }
+                if (arr.length == number) {
+                    return arr
+                }
+            }
+            throw "No sufficient blocks. "
+        },
+
+        getNumbersContinuousBlocks: function (number) {
+            let ids = this.getNumbersContinuousBlocksId(number)
+            return this.getBlocksByIdList(ids)
+        }
     }
     return bm
 }
@@ -122,6 +165,19 @@ function initGeneralEnvironment() {
     })
 
     ipcRenderer.on('selected-file', (event, content) => {
+        window.instructions = null
+        window.totalInstructions = 0
+        window.toExecInstructionId = 0
+        window.instructionInited = false
+        window.blockDirTables = [];
+        window.mainDirTable = null;
+        let bm = BlockManager()
+        for (let index = 0; index < 200; index++) {
+            bm.setBlockEmptyById(index)
+        }
+        clearRawInstructionTable()
+        renderMessage("")
+
         try {
             let parser = InstructionParser(content)
             window.instructions = parser.instructions
@@ -130,11 +186,12 @@ function initGeneralEnvironment() {
             window.instructionInited = true
 
             renderRawInstructionTable()
+
+            window.mainDirTable = DirectoryTable(window.TableHead)
+            window.mainDirTable.renderToDirectoryView()
             renderMessage("Instructions are loaded.")
         }
         catch (error) {
-            window.instructionInited = false
-            clearRawInstructionTable()
             renderMessage(error)
         }
     })
@@ -226,6 +283,10 @@ function Instruction(rawContentLine) {
         throw "Invalid instruction: '" + contentLine + "'."
     }
 
+    if (!instruction.directory.startsWith("root")) {
+        throw "Invalid instruction: '" + contentLine + "' \n The directory must starts with 'root'."
+    }
+
     if (isNaN(instruction.block) && instruction.oprand != "D") {
         throw "Invalid instruction: '" + contentLine + "'. \nThe block field is not a valid integer."
     }
@@ -244,10 +305,10 @@ function DirectoryTable(headTitleList) {
         headTitleList: headTitleList,
         cellArray: [],
 
-        toHtml: function () {
+        toHtmlElement: function () {
             let tableElement = document.createElement("table")
             let headRowTrElement = document.createElement("tr")
-            this.headTitleList.forEach(headTitle => {
+            this.headTitleList.forEach((headTitle) => {
                 let headElement = document.createElement("th")
                 headElement.innerText = headTitle
                 headRowTrElement.appendChild(headElement)
@@ -268,22 +329,53 @@ function DirectoryTable(headTitleList) {
             return tableElement
         },
 
-        push: function(contentList){
-            if(contentList.length == headTitleList.length){
-            this.cellArray.push(contentList)}
-            else{
+        push: function (contentList) {
+            if (contentList.length == headTitleList.length) {
+                this.cellArray.push(contentList)
+            }
+            else {
                 throw "Internal Error, directory table received push request whose array length is inconsistant with the head"
+            }
+        },
+
+        removeByFileName: function (file) {
+            this.cellArray.forEach(function (item, index, arr) {
+                if (item[0] == file) {
+                    arr.splice(index, 1);
+                }
+            })
+        },
+
+        hasFileName: function (fileName) {
+            for (const row of this.cellArray) {
+                if (row[0] == fileName) {
+                    return true
+                }
+            }
+            return false
+        },
+
+        getRowByFileName: function (fileName) {
+            for (const row of this.cellArray) {
+                if (row[0] == fileName) {
+                    return row
+                }
             }
         },
 
         renderToDirectoryView: function () {
             let main = document.getElementById("directory-table")
-            main.appendChild(this.toHtml())
+            if (main.hasChildNodes()) {
+                main.removeChild(main.childNodes[0])
+            }
+            main.appendChild(this.toHtmlElement())
         },
 
         renderToBlock: function (block) {
             block.addEventListener("click", (event) => {
-                this.renderToDirectoryView()
+                if (BlockManager().blockIsFull(block)) {
+                    this.renderToDirectoryView()
+                }
             })
         },
 
@@ -297,10 +389,28 @@ function renderMessage(message) {
     document.getElementById("messages").innerText = message;
 }
 
+function splitDirectories(rawDirectory) {
+    let dirs = rawDirectory.trim().split("/")
+
+    dirs.forEach(function (item, index, arr) {
+        if (!item) {
+            arr.splice(index, 1);
+        }
+    })
+
+    if (dirs.length > 1) {
+        return dirs.slice(1)
+    }
+    else {
+        return []
+    }
+}
+
 module.exports = {
     "InstructionParser": InstructionParser,
     "initGeneralEnvironment": initGeneralEnvironment,
     "BlockManager": BlockManager,
     "renderMessage": renderMessage,
-    "DirectoryTable": DirectoryTable
+    "DirectoryTable": DirectoryTable,
+    "splitDirectories": splitDirectories
 }

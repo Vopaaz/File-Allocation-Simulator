@@ -1,0 +1,2 @@
+root/sub, file_1, 6, C
+root/sub/file_1, file_2, 10, C

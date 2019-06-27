@@ -1,0 +1,5 @@
+root/sub, file_1, 6, C
+root/sub/next, file_2, 3, C
+root/sub/next, file_3, 3, C
+root/sub/next/further, file_4, 4, C
+root/sub/next, file_5, 3, C
