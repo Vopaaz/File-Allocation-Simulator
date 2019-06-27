@@ -164,6 +164,11 @@ function initGeneralEnvironment() {
         ipcRenderer.send('open-file-dialog')
     })
 
+    const fileInfoTblTitle = document.getElementById("file-infomation-table-title")
+    fileInfoTblTitle.addEventListener('click', (event) =>{
+        window.mainDirTable.renderToDirectoryView()
+    })
+
     ipcRenderer.on('selected-file', (event, content) => {
         window.instructions = null
         window.totalInstructions = 0
@@ -372,11 +377,13 @@ function DirectoryTable(headTitleList) {
         },
 
         renderToBlock: function (block) {
-            block.addEventListener("click", (event) => {
-                if (BlockManager().blockIsFull(block)) {
-                    this.renderToDirectoryView()
-                }
-            })
+            if (block) {
+                block.addEventListener("click", (event) => {
+                    if (BlockManager().blockIsFull(block)) {
+                        this.renderToDirectoryView()
+                    }
+                })
+            }
         },
 
         renderToBlockById: function (id) { this.renderToBlock(BlockManager().getBlockById(id)) }

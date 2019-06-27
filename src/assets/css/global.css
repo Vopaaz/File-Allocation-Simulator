@@ -4,18 +4,17 @@ h1, h2 {
 }
 
 .left-section {
-    width: 65%;
+    width: 60%;
     height: 800px;
     border-right: 1px solid;
     float: left;
 }
 
 .right-section {
-    width: 30%;
+    width: 38%;
     height: 800px;
     float: right;
-    padding: 15px;
-    border: 5px;
+    border: 50px;
 }
 
 .raw-instructions-display{
