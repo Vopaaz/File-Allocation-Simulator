@@ -4,7 +4,7 @@ const { ipcRenderer } = require('electron')
 
 function BlockManager() {
     function randColor() {
-        let r = Math.random() * 180 + 60
+        let r = Math.random() * 30 + 60
         let g = Math.random() * 180 + 60
         let b = Math.random() * 180 + 60
         return `rgba(${r},${g},${b},0.7)`
@@ -151,6 +151,47 @@ function BlockManager() {
         getNumbersContinuousBlocks: function (number) {
             let ids = this.getNumbersContinuousBlocksId(number)
             return this.getBlocksByIdList(ids)
+        },
+
+        showBlockIsBeingRead: function (block) {
+            function change(block, original_content) {
+
+                let r = "<span class='reading-text'> R! </span>"
+
+                if (block.innerHTML === original_content) {
+                    block.innerHTML = r
+                }
+                else {
+                    block.innerHTML = original_content
+                }
+            }
+
+            let original_content = block.innerText
+
+            let timerId = setInterval(() => {
+                change(block, original_content)
+            }, 200);
+
+            setTimeout(() => {
+                clearInterval(timerId)
+                block.innerHTML = original_content
+            }, 2000);
+        },
+
+        showBlockIsBeingReadById: function (id) {
+            this.showBlockIsBeingRead(this.getBlockById(id))
+        },
+
+        showBlocksAreBeingRead: function(blocks){
+            blocks.forEach(block => {
+                this.showBlockIsBeingRead(block)
+            });
+        },
+
+        showBlocksAreBeingReadByIdList: function(idList){
+            idList.forEach(id => {
+                this.showBlockIsBeingReadById(id)
+            });
         }
     }
     return bm
@@ -165,7 +206,7 @@ function initGeneralEnvironment() {
     })
 
     const fileInfoTblTitle = document.getElementById("file-infomation-table-title")
-    fileInfoTblTitle.addEventListener('click', (event) =>{
+    fileInfoTblTitle.addEventListener('click', (event) => {
         window.mainDirTable.renderToDirectoryView()
     })
 

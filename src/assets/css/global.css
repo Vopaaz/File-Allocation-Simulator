@@ -31,3 +31,7 @@ h1, h2 {
     height: 30%;
     overflow: auto;
 }
+
+.reading-text{
+    color: red;
+}
