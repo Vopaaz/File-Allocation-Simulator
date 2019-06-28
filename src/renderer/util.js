@@ -155,9 +155,7 @@ function BlockManager() {
 
         showBlockIsBeingRead: function (block) {
             function change(block, original_content) {
-
                 let r = "<span class='reading-text'> R! </span>"
-
                 if (block.innerHTML === original_content) {
                     block.innerHTML = r
                 }
@@ -166,7 +164,7 @@ function BlockManager() {
                 }
             }
 
-            let original_content = block.innerText
+            let original_content = block.innerHTML
 
             let timerId = setInterval(() => {
                 change(block, original_content)
@@ -192,7 +190,48 @@ function BlockManager() {
             idList.forEach(id => {
                 this.showBlockIsBeingReadById(id)
             });
+        },
+
+
+        showBlockIsBeingWritten: function (block) {
+            function change(block, original_content) {
+                let r = "<span class='writing-text'> W! </span>"
+                if (block.innerHTML === original_content) {
+                    block.innerHTML = r
+                }
+                else {
+                    block.innerHTML = original_content
+                }
+            }
+
+            let original_content = block.innerHTML
+
+            let timerId = setInterval(() => {
+                change(block, original_content)
+            }, 200);
+
+            setTimeout(() => {
+                clearInterval(timerId)
+                block.innerHTML = original_content
+            }, 2000);
+        },
+
+        showBlockIsBeingWrittenById: function (id) {
+            this.showBlockIsBeingWritten(this.getBlockById(id))
+        },
+
+        showBlocksAreBeingWritten: function(blocks){
+            blocks.forEach(block => {
+                this.showBlockIsBeingWritten(block)
+            });
+        },
+
+        showBlocksAreBeingWrittenByIdList: function(idList){
+            idList.forEach(id => {
+                this.showBlockIsBeingWrittenById(id)
+            });
         }
+
     }
     return bm
 }

@@ -126,11 +126,13 @@ function exeRead(instruction) {
         let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
         let start = row[1]
         let length = row[2]
-        if(instruction.block <= length){
-        bm.showBlockIsBeingReadById(start + instruction.block - 1)
-        message+=`Block ${instruction.block} of File ${instruction.fileName} is being read.`
+        if (instruction.block <= length) {
+            let id = start + instruction.block - 1
+            bm.showBlockIsBeingReadById(id)
+            message += `According to the final Directory Table,` +
+                ` Block ${instruction.block} of File ${instruction.fileName} is at Block ${id}, which is being read now.`
         }
-        else{
+        else {
             throw `Block number (${instruction.block}) in the instruction is larger than the file length.`
         }
     }
@@ -139,7 +141,48 @@ function exeRead(instruction) {
 }
 
 function exeWrite(instruction) {
+    let dirs = splitDirectories(instruction.directory)
+    let toLookInfoDirTable = window.mainDirTable
+    let bm = BlockManager()
+    let message = "Look into Main Directory Table.\n"
 
+    for (const dir of dirs) {
+        if (toLookInfoDirTable.hasFileName(dir)) {
+            let nextDirTableBlockId = toLookInfoDirTable.getRowByFileName(dir)[1]
+            message += `According to current Directory Table, '${dir}' is at Block ${nextDirTableBlockId}.\n`
+            if (window.blockDirTables[nextDirTableBlockId]) {
+                message += `Look into Directory Table in Block '${nextDirTableBlockId}'.\n`
+                toLookInfoDirTable = window.blockDirTables[nextDirTableBlockId]
+            } else {
+                throw `Internal Error: Directory Table not found.`
+            }
+        }
+        else {
+            throw `'${dir}' does not exist in current Directory Table. i.e. the path to the file does not exist.`
+        }
+    }
+
+    message = message.slice(0, -2) + `, which is the final Directory Table to look for the file information.\n`
+
+    if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
+        throw "File " + instruction.fileName + "does not exist in" + instruction.directory
+    }
+    else {
+        let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
+        let start = row[1]
+        let length = row[2]
+        if (instruction.block <= length) {
+            let id = start + instruction.block - 1
+            bm.showBlockIsBeingWrittenById(id)
+            message += `According to the final Directory Table,` +
+                ` Block ${instruction.block} of File ${instruction.fileName} is at Block ${id}, which is being written now.`
+        }
+        else {
+            throw `Block number (${instruction.block}) in the instruction is larger than the file length.`
+        }
+    }
+
+    renderMessage(message)
 }
 
 function exeDelete(instruction) {

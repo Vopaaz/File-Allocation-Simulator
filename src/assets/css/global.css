@@ -33,5 +33,9 @@ h1, h2 {
 }
 
 .reading-text{
+    color: white;
+}
+
+.writing-text{
     color: red;
 }
