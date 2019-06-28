@@ -4,7 +4,7 @@ const { ipcRenderer } = require('electron')
 
 function BlockManager() {
     function randColor() {
-        let r = Math.random() * 30 + 60
+        let r = Math.random() * 100 + 60
         let g = Math.random() * 180 + 60
         let b = Math.random() * 180 + 60
         return `rgba(${r},${g},${b},0.7)`
@@ -449,6 +449,10 @@ function DirectoryTable(headTitleList) {
             }
         },
 
+        isEmpty: function(){
+            return this.cellArray.length == 0
+        },
+
         renderToDirectoryView: function () {
             let main = document.getElementById("directory-table")
             if (main.hasChildNodes()) {
@@ -474,7 +478,7 @@ function DirectoryTable(headTitleList) {
 }
 
 function renderMessage(message) {
-    document.getElementById("messages").innerText = message;
+    document.getElementById("messages").innerHTML = message;
 }
 
 function splitDirectories(rawDirectory) {
