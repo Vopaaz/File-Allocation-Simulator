@@ -66,18 +66,62 @@ function execute(instruction) {
     }
 }
 
-function exeCreate() {
+function exeCreate(instruction) {
+    let dirs = splitDirectories(instruction.directory)
+    let toLookInfoDirTable = window.mainDirTable
+    let bm = BlockManager()
+    let message = "<p>Look into Main Directory Table.</p>"
+
+    // Logic body
+
+
+    window.mainDirTable.renderToDirectoryView()
+    renderMessage(message)
+
 
 }
 
-function exeRead() {
+function exeRead(instruction) {
+    let dirs = splitDirectories(instruction.directory)
+    let toLookInfoDirTable = window.mainDirTable
+    let bm = BlockManager()
+    let message = "<p>Look into Main Directory Table.</p>"
+
+    // Logic body
+
+
+    window.mainDirTable.renderToDirectoryView()
+    renderMessage(message)
+
 
 }
 
-function exeWrite() {
+function exeWrite(instruction) {
+    let dirs = splitDirectories(instruction.directory)
+    let toLookInfoDirTable = window.mainDirTable
+    let bm = BlockManager()
+    let message = "<p>Look into Main Directory Table.</p>"
+
+    // Logic body
+
+
+    window.mainDirTable.renderToDirectoryView()
+    renderMessage(message)
+
 
 }
 
-function exeDelete() {
+function exeDelete(instruction) {
+    let dirs = splitDirectories(instruction.directory)
+    let toLookInfoDirTable = window.mainDirTable
+    let bm = BlockManager()
+    let message = "<p>Look into Main Directory Table.</p>"
+
+    // Logic body
+
+
+    window.mainDirTable.renderToDirectoryView()
+    renderMessage(message)
+
 
 }

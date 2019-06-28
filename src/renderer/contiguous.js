@@ -70,7 +70,7 @@ function exeCreate(instruction) {
     let dirs = splitDirectories(instruction.directory)
     let toSaveInfoDirTable = window.mainDirTable
     let bm = BlockManager()
-    let message = "Look into Main Directory Table.\n"
+    let message = "<p>Look into Main Directory Table.</p>"
 
     for (const dir of dirs) {
         if (toSaveInfoDirTable.hasFileName(dir)) {
