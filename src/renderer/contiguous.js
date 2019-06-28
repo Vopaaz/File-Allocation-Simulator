@@ -25,16 +25,18 @@ stepButton.addEventListener('click', (event) => executeNext())
 
 const autoBtn = document.getElementById('auto')
 function startAuto() {
+    renderMessage("<p> Automatic Execution Starts. </p>")
     let id = setInterval(() => {
         executeNext()
     }, 2000)
-    autoBtn.onclick = function(){
+    autoBtn.onclick = function () {
         stopAuto(id)
     }
 }
 
 function stopAuto(id) {
     clearInterval(id)
+    renderMessage("<p> Automatic Execution Terminated. </p>")
     autoBtn.onclick = startAuto
 }
 

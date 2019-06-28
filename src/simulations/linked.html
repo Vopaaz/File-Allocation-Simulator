@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Linked Simulation</title>
+    <link rel="stylesheet" href="../assets/css/file-block.css">
+    <link rel="stylesheet" href="../assets/css/global.css">
+</head>
+
+<body>
+
+    <h2>Linked Simulation</h2>
+
+    <div class="left-section">
+
+        <div class="block-board" id="block-board">
+            <script> for (let index = 0; index < 200; index++) {
+                    document.write('<div class="block-empty" id="block-' + index + '"> ' + index + '</div>');
+                } </script>
+        </div>
+
+        <button class="control-button" id="step">Step</button>
+        <button class="control-button" id="auto">Auto</button>
+        <button class="control-button" id="input">Select DataFile</button>
+
+    </div>
+
+    <div class="right-section">
+        <div class="raw-instructions-display">
+            <h3> Instructions:</h3>
+            <div class="raw-instructions" id="raw-instructions"> </div>
+        </div>
+        <div class="file-information-table">
+            <h3 id="file-infomation-table-title">File Information Table</h3>
+            <div class="directory-table" id="directory-table"></div>
+        </div>
+        <div class="execution-message">
+            <h3> Messages:</h3>
+            <div class="messages" id="messages"></div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        require("../renderer/linked.js")
+    </script>
+
+</body>
+
+</html>

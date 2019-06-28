@@ -1,0 +1,5 @@
+root, file_1, 2, C
+root, file_2, 4, C
+root, file_3, 3, C
+root, file_2, 2, D
+root, file_large, 20, C
