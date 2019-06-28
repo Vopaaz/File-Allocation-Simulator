@@ -145,12 +145,29 @@ function BlockManager() {
                     return arr
                 }
             }
-            throw "No sufficient blocks. "
+            throw "No sufficient blocks."
         },
 
         getNumbersContinuousBlocks: function (number) {
             let ids = this.getNumbersContinuousBlocksId(number)
             return this.getBlocksByIdList(ids)
+        },
+
+        getNumbersDiscreteBlocksId: function(number){
+            let arr = []
+            for (let index = 0; index < 200; index++) {
+                if (this.blockIsEmptyById(index)){
+                    arr.push(index)
+                    if(arr.length == number){
+                        return arr
+                    }
+                }
+            }
+            throw "No sufficient blocks."
+        },
+
+        getNumbersDiscreteBlocks: function(number){
+            return this.getBlocksByIdList(this.getNumbersDiscreteBlocksId(number))
         },
 
         showBlockIsBeingRead: function (block) {
@@ -254,8 +271,9 @@ function initGeneralEnvironment() {
         window.totalInstructions = 0
         window.toExecInstructionId = 0
         window.instructionInited = false
-        window.blockDirTables = [];
-        window.mainDirTable = DirectoryTable(window.tableHead);
+        window.blockDirTables = []
+        window.pointers = []
+        window.mainDirTable = DirectoryTable(window.tableHead)
         window.mainDirTable.renderToDirectoryView()
         let bm = BlockManager()
         for (let index = 0; index < 200; index++) {

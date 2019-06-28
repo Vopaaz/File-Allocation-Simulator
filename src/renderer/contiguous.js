@@ -82,8 +82,7 @@ function exeCreate(instruction) {
             } else {
                 throw `<p>There is a file with the same name as the directory '${dir}', which causes conflict.</p>`
             }
-        }
-        else {
+        } else {
             message += `<p>'${dir}' not found in current Directory Table.</p>`
             let newTable = DirectoryTable(window.tableHead)
             let newBlockId = bm.getOneEmptyBlockId()
@@ -100,16 +99,11 @@ function exeCreate(instruction) {
 
     if (toSaveInfoDirTable.hasFileName(instruction.fileName)) {
         throw "<p>" + instruction.fileName + "already exists in" + instruction.directory + "</p>"
-    }
-    else {
+    } else {
         let toFillBlocksId = bm.getNumbersContinuousBlocksId(instruction.block)
         bm.setBlocksFullByIdList(toFillBlocksId)
         toSaveInfoDirTable.push([instruction.fileName, toFillBlocksId[0], instruction.block])
         message += `<p>File ${instruction.fileName} is created starting from Block ${toFillBlocksId[0]}, and the information is registered.</p>`
-        if (toSaveInfoDirTable != window.mainDirTable) {
-            blockDirTables[toFillBlocksId] = toSaveInfoDirTable
-            toSaveInfoDirTable.renderToBlockById(toFillBlocksId)
-        }
     }
     window.mainDirTable.renderToDirectoryView()
     renderMessage(message)
@@ -131,8 +125,7 @@ function exeRead(instruction) {
             } else {
                 throw `Internal Error: Directory Table not found.`
             }
-        }
-        else {
+        } else {
             throw `<p>'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.</p>`
         }
     }
@@ -151,8 +144,7 @@ function exeRead(instruction) {
             bm.showBlockIsBeingReadById(id)
             message += `<p>According to the final Directory Table,` +
                 ` Block ${instruction.block} of File ${instruction.fileName} is at Block ${id}, which is being read now.</p>`
-        }
-        else {
+        } else {
             throw `<p>Block number (${instruction.block}) in the instruction is larger than the file length.</p>`
         }
     }
@@ -176,8 +168,7 @@ function exeWrite(instruction) {
             } else {
                 throw `<p>Internal Error: Directory Table not found.</p>`
             }
-        }
-        else {
+        } else {
             throw `<p>'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.</p>`
         }
     }
@@ -196,8 +187,7 @@ function exeWrite(instruction) {
             bm.showBlockIsBeingWrittenById(id)
             message += `<p>According to the final Directory Table,` +
                 ` Block ${instruction.block} of File ${instruction.fileName} is at Block ${id}, which is being written now.</p>`
-        }
-        else {
+        } else {
             throw `<p>Block number (${instruction.block}) in the instruction is larger than the file length.</p>`
         }
     }
@@ -221,8 +211,7 @@ function exeDelete(instruction) {
             } else {
                 throw `<p>Internal Error: Directory Table not found.</p>`
             }
-        }
-        else {
+        } else {
             throw `<p>'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.</p>`
         }
     }
@@ -248,8 +237,7 @@ function exeDelete(instruction) {
 
             message += `<p>According to the final Directory Table,` +
                 ` File ${instruction.fileName} begins at Block ${start}, which is deleted.</p>`
-        }
-        else if (window.blockDirTables[start].isEmpty()) {
+        } else if (window.blockDirTables[start].isEmpty()) {
             // Is empty directory
             toLookInfoDirTable.removeByFileName(instruction.fileName)
             bm.setBlockEmptyById(start)
