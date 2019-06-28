@@ -260,7 +260,7 @@ function exeDelete(instruction) {
         let start = row[1]
         let end = row[2]
 
-        if ((window.blockDirTables[start] == null) || (window.blockDirTables[start] == undefined)){
+        if ((window.blockDirTables[start] == null) || (window.blockDirTables[start] == undefined)) {
             // Is file
             toLookInfoDirTable.removeByFileName(instruction.fileName)
             let currentBlockId = start

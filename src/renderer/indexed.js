@@ -4,7 +4,8 @@ const { BlockManager, initGeneralEnvironment, renderMessage, DirectoryTable, spl
 
 window.tableHead = ["File", "Index Block"]
 initGeneralEnvironment()
-window.blockIndexTables = []
+window.blockIndexTableHead = ["Index"]
+
 
 function executeNext() {
     if (window.instructionInited) {
@@ -68,7 +69,7 @@ function execute(instruction) {
 }
 
 
-function exeCreate() {
+function exeCreate(instruction) {
     let dirs = splitDirectories(instruction.directory)
     let toSaveInfoDirTable = window.mainDirTable
     let bm = BlockManager()
@@ -76,8 +77,9 @@ function exeCreate() {
 
     for (const dir of dirs) {
         if (toSaveInfoDirTable.hasFileName(dir)) {
-            let nextDirTableBlockId = toSaveInfoDirTable.getRowByFileName(dir)[1]
-            message += `<p>'${dir}' found in current Directory Table at Block ${nextDirTableBlockId}.</p>`
+            let nextIndexTableBlockId = toSaveInfoDirTable.getRowByFileName(dir)[1]
+            let nextDirTableBlockId = window.blockIndexTables[nextIndexTableBlockId].cellArray[0][0]
+            message += `<p>'${dir}' found in current Directory Table at Block ${nextDirTableBlockId} by following the index at Block ${nextIndexTableBlockId}.</p>`
             if (window.blockDirTables[nextDirTableBlockId]) {
                 message += `<p>Look into Directory Table in Block '${nextDirTableBlockId}'.</p>`
                 toSaveInfoDirTable = window.blockDirTables[nextDirTableBlockId]
@@ -86,25 +88,65 @@ function exeCreate() {
             }
         } else {
             message += `<p>'${dir}' not found in current Directory Table.</p>`
+
+            let newIndex = DirectoryTable(window.blockIndexTableHead)
+            let newIndexBlockId = bm.getOneEmptyBlockId()
+            window.blockIndexTables[newIndexBlockId] = newIndex
+            bm.setBlockFullById(newIndexBlockId)
+
+            toSaveInfoDirTable.push([dir, newIndexBlockId])
             let newTable = DirectoryTable(window.tableHead)
             let newBlockId = bm.getOneEmptyBlockId()
-            bm.setBlockFullById(newBlockId)
-            toSaveInfoDirTable.push([dir, newBlockId, 1])
             window.blockDirTables[newBlockId] = newTable
+            bm.setBlockFullById(newBlockId)
+
+            newIndex.push([newBlockId])
+            window.blockDirTables[newBlockId] = newTable
+
             newTable.renderToBlockById(newBlockId)
+            newIndex.renderToBlockById(newIndexBlockId)
+
             toSaveInfoDirTable = newTable
-            message += `<p>A new Directory Table is created at Block ${newBlockId}.</p>`
+
+            message += `<p>Index Block created at ${newIndexBlockId}. `
+            message += `And a new Directory Table is created at Block ${newBlockId}.</p>`
         }
     }
 
+    message = message.slice(0, -5) + `, which is the final Directory Table to register the file information.</p>`
+
+    if (toSaveInfoDirTable.hasFileName(instruction.fileName)) {
+        throw "<p>" + instruction.fileName + "already exists in" + instruction.directory + "</p>"
+    } else {
+
+        let newIndexBlockId = bm.getOneEmptyBlockId()
+        let newIndex = DirectoryTable(window.blockIndexTableHead)
+        bm.setBlockFullById(newIndexBlockId)
+
+        message += `A new Index Block is create at ${newIndexBlockId} which stores the block indexes of the file.`
+
+        let toFillBlocksIds = bm.getNumbersDiscreteBlocksId(instruction.block)
+        bm.setBlocksFullByIdList(toFillBlocksIds)
+
+        toFillBlocksIds.forEach(element => {
+            newIndex.push([element])
+        });
+
+        toSaveInfoDirTable.push([instruction.fileName, newIndexBlockId])
+        newIndex.renderToBlockById(newIndexBlockId)
+        message += `<p>File ${instruction.fileName} is created in ${toFillBlocksIds}, and the information is registered.</p>`
+    }
+
+    window.mainDirTable.renderToDirectoryView()
+    renderMessage(message)
 }
 
-function exeRead() {
+function exeRead(instruction) {
 
 }
-function exeWrite() {
+function exeWrite(instruction) {
 
- }
-function exeDelete() {
+}
+function exeDelete(instruction) {
 
- }
+}
