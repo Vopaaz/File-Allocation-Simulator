@@ -168,25 +168,25 @@ function BlockManager() {
 
             let timerId = setInterval(() => {
                 change(block, original_content)
-            }, 200);
+            }, 200)
 
             setTimeout(() => {
                 clearInterval(timerId)
                 block.innerHTML = original_content
-            }, 2000);
+            }, 1500)
         },
 
         showBlockIsBeingReadById: function (id) {
             this.showBlockIsBeingRead(this.getBlockById(id))
         },
 
-        showBlocksAreBeingRead: function(blocks){
+        showBlocksAreBeingRead: function (blocks) {
             blocks.forEach(block => {
                 this.showBlockIsBeingRead(block)
             });
         },
 
-        showBlocksAreBeingReadByIdList: function(idList){
+        showBlocksAreBeingReadByIdList: function (idList) {
             idList.forEach(id => {
                 this.showBlockIsBeingReadById(id)
             });
@@ -220,13 +220,13 @@ function BlockManager() {
             this.showBlockIsBeingWritten(this.getBlockById(id))
         },
 
-        showBlocksAreBeingWritten: function(blocks){
+        showBlocksAreBeingWritten: function (blocks) {
             blocks.forEach(block => {
                 this.showBlockIsBeingWritten(block)
             });
         },
 
-        showBlocksAreBeingWrittenByIdList: function(idList){
+        showBlocksAreBeingWrittenByIdList: function (idList) {
             idList.forEach(id => {
                 this.showBlockIsBeingWrittenById(id)
             });
@@ -449,7 +449,7 @@ function DirectoryTable(headTitleList) {
             }
         },
 
-        isEmpty: function(){
+        isEmpty: function () {
             return this.cellArray.length == 0
         },
 

@@ -5,9 +5,7 @@ const { BlockManager, initGeneralEnvironment, renderMessage, DirectoryTable, spl
 window.tableHead = ["File", "Start", "Length"]
 initGeneralEnvironment()
 
-const stepButton = document.getElementById('step')
-
-stepButton.addEventListener('click', (event) => {
+function executeNext() {
     if (window.instructionInited) {
         if (window.toExecInstructionId < window.totalInstructions) {
             let instruction = window.instructions[window.toExecInstructionId++]
@@ -20,7 +18,27 @@ stepButton.addEventListener('click', (event) => {
     else {
         renderMessage("Instructions data not initialized.")
     }
-})
+}
+
+const stepButton = document.getElementById('step')
+stepButton.addEventListener('click', (event) => executeNext())
+
+const autoBtn = document.getElementById('auto')
+function startAuto() {
+    let id = setInterval(() => {
+        executeNext()
+    }, 2000)
+    autoBtn.onclick = function(){
+        stopAuto(id)
+    }
+}
+
+function stopAuto(id) {
+    clearInterval(id)
+    autoBtn.onclick = startAuto
+}
+
+autoBtn.onclick = startAuto
 
 
 function execute(instruction) {
@@ -79,7 +97,7 @@ function exeCreate(instruction) {
     message = message.slice(0, -5) + `, which is the final Directory Table to register the file information.</p>`
 
     if (toSaveInfoDirTable.hasFileName(instruction.fileName)) {
-        throw "<p>"+ instruction.fileName + "already exists in" + instruction.directory + "</p>"
+        throw "<p>" + instruction.fileName + "already exists in" + instruction.directory + "</p>"
     }
     else {
         let toFillBlocksId = bm.getNumbersContinuousBlocksId(instruction.block)
@@ -216,7 +234,6 @@ function exeDelete(instruction) {
         let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
         let start = row[1]
         let length = row[2]
-        console.log(window.blockDirTables[start])
         if ((window.blockDirTables[start] == null) || (window.blockDirTables[start] == undefined)) {
             // Is file
             toLookInfoDirTable.removeByFileName(instruction.fileName)
