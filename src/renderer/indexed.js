@@ -187,7 +187,6 @@ function exeRead(instruction) {
     renderMessage(message)
 }
 
-
 function exeWrite(instruction) {
     let dirs = splitDirectories(instruction.directory)
     let toLookInfoDirTable = window.mainDirTable
@@ -235,5 +234,62 @@ function exeWrite(instruction) {
 
 
 function exeDelete(instruction) {
+    let dirs = splitDirectories(instruction.directory)
+    let toLookInfoDirTable = window.mainDirTable
+    let bm = BlockManager()
+    let message = "<p>Look into Main Directory Table.</p>"
 
+    for (const dir of dirs) {
+        if (toLookInfoDirTable.hasFileName(dir)) {
+            let nextIndexTableBlockId = toLookInfoDirTable.getRowByFileName(dir)[1]
+            let nextDirTableBlockId = window.blockIndexTables[nextIndexTableBlockId].cellArray[0][0]
+            message += `<p>'${dir}' found in current Directory Table. It locates in Block ${nextDirTableBlockId}, found by following the index at Block ${nextIndexTableBlockId}.</p>`
+            if (window.blockDirTables[nextDirTableBlockId]) {
+                message += `<p>Look into Directory Table in Block '${nextDirTableBlockId}'.</p>`
+                toLookInfoDirTable = window.blockDirTables[nextDirTableBlockId]
+            } else {
+                throw `Internal Error: Directory Table not found.`
+            }
+        } else {
+            throw `<p>'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.</p>`
+        }
+    }
+
+    message = message.slice(0, -5) + `, which is the final Directory Table to look for the file information.</p>`
+
+    if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
+        throw "File " + instruction.fileName + "does not exist in" + instruction.directory
+    } else {
+        let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
+        let indexBlockId = row[1]
+        let indexTable = window.blockIndexTables[indexBlockId].cellArray
+        let firstActualBlockId = indexTable[0][0]
+        if ((window.blockDirTables[firstActualBlockId] == null) || (window.blockDirTables[firstActualBlockId] == undefined)) {
+            // Is file
+            toLookInfoDirTable.removeByFileName(instruction.fileName)
+            let toPrintLocs = []
+            indexTable.forEach(element => {
+                bm.setBlockEmptyById(element[0])
+                toPrintLocs.push(element[0])
+            });
+            bm.setBlockEmptyById(indexBlockId)
+            window.blockIndexTables[indexBlockId] = null
+            message += `<p>According to the final Directory Table, the Index Block of File ${instruction.fileName} is at Block ${indexBlockId}. ` +
+                `And its contents are at ${toPrintLocs}. They are all deleted. </p>`
+        } else if (window.blockDirTables[firstActualBlockId].isEmpty()) {
+            // Is empty directory
+            toLookInfoDirTable.removeByFileName(instruction.fileName)
+            bm.setBlockEmptyById(indexBlockId)
+            bm.setBlockEmptyById(firstActualBlockId)
+            window.blockDirTables[firstActualBlockId] = null
+            message += `<p> According to the final Directory Table, the Index Block of Directory ${instruction.fileName} is at Block ${indexBlockId}, `+
+            `and the directory itself is at ${firstActualBlockId}. They are all deleted.`
+        } else {
+            // Is full directory
+            throw `<p>Directory ${instruction.fileName} is not empty, thus the deleting request is denied.</p>`
+        }
+    }
+
+    window.mainDirTable.renderToDirectoryView()
+    renderMessage(message)
 }
