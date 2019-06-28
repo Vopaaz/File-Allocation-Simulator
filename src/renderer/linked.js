@@ -236,11 +236,41 @@ function exeDelete(instruction) {
     let bm = BlockManager()
     let message = "<p>Look into Main Directory Table.</p>"
 
-    // Logic body
+    for (const dir of dirs) {
+        if (toLookInfoDirTable.hasFileName(dir)) {
+            let nextDirTableBlockId = toLookInfoDirTable.getRowByFileName(dir)[1]
+            message += `<p>According to current Directory Table, '${dir}' is at Block ${nextDirTableBlockId}.</p>`
+            if (window.blockDirTables[nextDirTableBlockId]) {
+                message += `<p>Look into Directory Table in Block '${nextDirTableBlockId}'.</p>`
+                toLookInfoDirTable = window.blockDirTables[nextDirTableBlockId]
+            } else {
+                throw `Internal Error: Directory Table not found.`
+            }
+        } else {
+            throw `<p>'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.</p>`
+        }
+    }
 
+    message = message.slice(0, -5) + `, which is the final Directory Table to look for the file information.</p>`
+
+    if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
+        throw "File " + instruction.fileName + "does not exist in" + instruction.directory
+    } else {
+        let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
+        let start = row[1]
+        let end = row[2]
+        let currentBlockId = start
+        message += `<p>According to the final Directory Table, the first block is ${start}</p>`
+        while (currentBlockId != end) {
+            message += `<p>Block ${currentBlockId} is deleted. Its pointer points to`
+            bm.setBlockEmptyById(currentBlockId)
+            currentBlockId = window.pointers[currentBlockId].cellArray[0][1]
+            message += ` ${currentBlockId}</p>`
+        }
+        bm.setBlockEmptyById(end)
+        message += `<p>Block ${end}, which is the end of the file, is deleted.`
+    }
 
     window.mainDirTable.renderToDirectoryView()
     renderMessage(message)
-
-
 }

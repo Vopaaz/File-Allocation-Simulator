@@ -1,0 +1,2 @@
+root/sub, file_1, 4, C
+root/sub/nonexist, file_1, 3, R
