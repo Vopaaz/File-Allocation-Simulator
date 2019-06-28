@@ -247,8 +247,24 @@ function BlockManager() {
             idList.forEach(id => {
                 this.showBlockIsBeingWrittenById(id)
             });
-        }
+        },
 
+        derenderBlock: function (block) {
+            if (block) {
+                let blockClone = block.cloneNode(true);
+                block.parentNode.replaceChild(blockClone, block);
+            }
+        },
+
+        derenderBlockById: function (id) {
+            this.derenderBlock(this.getBlockById(id))
+        },
+
+        derenderBlocksByIdList: function (idList) {
+            idList.forEach(id => {
+                this.derenderBlockById(id)
+            });
+        }
     }
     return bm
 }
@@ -279,6 +295,7 @@ function initGeneralEnvironment() {
         let bm = BlockManager()
         for (let index = 0; index < 200; index++) {
             bm.setBlockEmptyById(index)
+            bm.derenderBlockById(index)
         }
         clearRawInstructionTable()
         renderMessage("")
@@ -494,7 +511,7 @@ function DirectoryTable(headTitleList) {
             }
         },
 
-        renderToBlockById: function (id) { this.renderToBlock(BlockManager().getBlockById(id)) }
+        renderToBlockById: function (id) { this.renderToBlock(BlockManager().getBlockById(id)) },
     }
 
     return dt

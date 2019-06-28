@@ -270,9 +270,11 @@ function exeDelete(instruction) {
             let toPrintLocs = []
             indexTable.forEach(element => {
                 bm.setBlockEmptyById(element[0])
+                bm.derenderBlockById(element[0])
                 toPrintLocs.push(element[0])
             });
             bm.setBlockEmptyById(indexBlockId)
+            bm.derenderBlockById(indexBlockId)
             window.blockIndexTables[indexBlockId] = null
             message += `<p>According to the final Directory Table, the Index Block of File ${instruction.fileName} is at Block ${indexBlockId}. ` +
                 `And its contents are at ${toPrintLocs}. They are all deleted. </p>`
@@ -281,6 +283,8 @@ function exeDelete(instruction) {
             toLookInfoDirTable.removeByFileName(instruction.fileName)
             bm.setBlockEmptyById(indexBlockId)
             bm.setBlockEmptyById(firstActualBlockId)
+            bm.derenderBlockById(indexBlockId)
+            bm.derenderBlockById(firstActualBlockId)
             window.blockDirTables[firstActualBlockId] = null
             message += `<p> According to the final Directory Table, the Index Block of Directory ${instruction.fileName} is at Block ${indexBlockId}, `+
             `and the directory itself is at ${firstActualBlockId}. They are all deleted.`

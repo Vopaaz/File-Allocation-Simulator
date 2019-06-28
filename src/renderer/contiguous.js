@@ -240,6 +240,7 @@ function exeDelete(instruction) {
             // Is empty directory
             toLookInfoDirTable.removeByFileName(instruction.fileName)
             bm.setBlockEmptyById(start)
+            bm.derenderBlockById(start)
             window.blockDirTables[start] = undefined
             message += `<p>According to the final Directory Table,` +
                 ` Directory ${instruction.fileName} is at Block ${start}, which is deleted.</p>`
