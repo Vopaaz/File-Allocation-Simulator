@@ -268,7 +268,9 @@ function exeDelete(instruction) {
             while (currentBlockId != end) {
                 message += `<p>Block ${currentBlockId} is deleted. Its pointer points to`
                 bm.setBlockEmptyById(currentBlockId)
-                currentBlockId = window.pointers[currentBlockId].cellArray[0][1]
+                let toFreePointerBlockId = currentBlockId
+                currentBlockId = window.pointers[toFreePointerBlockId].cellArray[0][1]
+                window.pointers[toFreePointerBlockId] = undefined
                 message += ` ${currentBlockId}</p>`
             }
             bm.setBlockEmptyById(end)
