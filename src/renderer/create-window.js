@@ -39,3 +39,20 @@ newLinkedSimBtn.addEventListener('click', (event) => {
     win.loadURL(htmlPath)
     win.show()
 })
+
+
+const newIndexedSimBtn = document.getElementById('new-indexed-simulation')
+newIndexedSimBtn.addEventListener('click', (event) => {
+    const htmlPath = path.join('file://', __dirname, '../simulations/indexed.html')
+    let win = new BrowserWindow({
+        width: win_width,
+        height: win_height,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    })
+    win.openDevTools()
+    win.on('close', () => { win = null })
+    win.loadURL(htmlPath)
+    win.show()
+})
