@@ -89,7 +89,7 @@ function exeCreate(instruction) {
             let newTable = DirectoryTable(window.tableHead)
             let newBlockId = bm.getOneEmptyBlockId()
             bm.setBlockFullById(newBlockId)
-            toSaveInfoDirTable.push([dir, newBlockId, 1])
+            toSaveInfoDirTable.push([dir, newBlockId, newBlockId])
             window.blockDirTables[newBlockId] = newTable
             newTable.renderToBlockById(newBlockId)
             toSaveInfoDirTable = newTable
@@ -259,16 +259,30 @@ function exeDelete(instruction) {
         let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
         let start = row[1]
         let end = row[2]
-        let currentBlockId = start
-        message += `<p>According to the final Directory Table, the first block is ${start}</p>`
-        while (currentBlockId != end) {
-            message += `<p>Block ${currentBlockId} is deleted. Its pointer points to`
-            bm.setBlockEmptyById(currentBlockId)
-            currentBlockId = window.pointers[currentBlockId].cellArray[0][1]
-            message += ` ${currentBlockId}</p>`
+
+        if ((window.blockDirTables[start] == null) || (window.blockDirTables[start] == undefined)){
+            // Is file
+            toLookInfoDirTable.removeByFileName(instruction.fileName)
+            let currentBlockId = start
+            message += `<p>According to the final Directory Table, the first block is ${start}</p>`
+            while (currentBlockId != end) {
+                message += `<p>Block ${currentBlockId} is deleted. Its pointer points to`
+                bm.setBlockEmptyById(currentBlockId)
+                currentBlockId = window.pointers[currentBlockId].cellArray[0][1]
+                message += ` ${currentBlockId}</p>`
+            }
+            bm.setBlockEmptyById(end)
+            message += `<p>Block ${end}, which is the end of the file, is deleted.`
+        } else if (window.blockDirTables[start].isEmpty()) {
+            // Is empty directory
+            toLookInfoDirTable.removeByFileName(instruction.fileName)
+            bm.setBlockEmptyById(start)
+            message += `<p>According to the final Directory Table,` +
+                ` Directory ${instruction.fileName} is at Block ${start}, which is deleted.</p>`
+        } else {
+            // Is full directory
+            throw `<p>Directory ${instruction.fileName} is not empty, thus the deleting request is denied.</p>`
         }
-        bm.setBlockEmptyById(end)
-        message += `<p>Block ${end}, which is the end of the file, is deleted.`
     }
 
     window.mainDirTable.renderToDirectoryView()

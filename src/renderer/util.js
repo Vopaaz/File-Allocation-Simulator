@@ -273,6 +273,7 @@ function initGeneralEnvironment() {
         window.instructionInited = false
         window.blockDirTables = []
         window.pointers = []
+        window.blockIndexTables = []
         window.mainDirTable = DirectoryTable(window.tableHead)
         window.mainDirTable.renderToDirectoryView()
         let bm = BlockManager()

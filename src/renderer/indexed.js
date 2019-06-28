@@ -2,9 +2,9 @@
 
 const { BlockManager, initGeneralEnvironment, renderMessage, DirectoryTable, splitDirectories } = require('./util.js')
 
-window.tableHead = ["File", "Start", "End"]
+window.tableHead = ["File", "Index Block"]
 initGeneralEnvironment()
-
+window.blockIndexTables = []
 
 function executeNext() {
     if (window.instructionInited) {
@@ -69,9 +69,42 @@ function execute(instruction) {
 
 
 function exeCreate() {
+    let dirs = splitDirectories(instruction.directory)
+    let toSaveInfoDirTable = window.mainDirTable
+    let bm = BlockManager()
+    let message = "<p>Look into Main Directory Table.</p>"
+
+    for (const dir of dirs) {
+        if (toSaveInfoDirTable.hasFileName(dir)) {
+            let nextDirTableBlockId = toSaveInfoDirTable.getRowByFileName(dir)[1]
+            message += `<p>'${dir}' found in current Directory Table at Block ${nextDirTableBlockId}.</p>`
+            if (window.blockDirTables[nextDirTableBlockId]) {
+                message += `<p>Look into Directory Table in Block '${nextDirTableBlockId}'.</p>`
+                toSaveInfoDirTable = window.blockDirTables[nextDirTableBlockId]
+            } else {
+                throw `<p>There is a file with the same name as the directory '${dir}', which causes conflict.</p>`
+            }
+        } else {
+            message += `<p>'${dir}' not found in current Directory Table.</p>`
+            let newTable = DirectoryTable(window.tableHead)
+            let newBlockId = bm.getOneEmptyBlockId()
+            bm.setBlockFullById(newBlockId)
+            toSaveInfoDirTable.push([dir, newBlockId, 1])
+            window.blockDirTables[newBlockId] = newTable
+            newTable.renderToBlockById(newBlockId)
+            toSaveInfoDirTable = newTable
+            message += `<p>A new Directory Table is created at Block ${newBlockId}.</p>`
+        }
+    }
 
 }
 
-function exeRead() { }
-function exeWrite() { }
-function exeDelete() { }
+function exeRead() {
+
+}
+function exeWrite() {
+
+ }
+function exeDelete() {
+
+ }
