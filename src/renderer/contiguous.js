@@ -2,7 +2,7 @@
 
 const { BlockManager, initGeneralEnvironment, renderMessage, DirectoryTable, splitDirectories } = require('./util.js')
 
-window.TableHead = ["File", "Start", "Length"]
+window.tableHead = ["File", "Start", "Length"]
 initGeneralEnvironment()
 
 const stepButton = document.getElementById('step')
@@ -65,7 +65,7 @@ function exeCreate(instruction) {
         }
         else {
             message += `'${dir}' not found in current Directory Table.\n`
-            let newTable = DirectoryTable(window.TableHead)
+            let newTable = DirectoryTable(window.tableHead)
             let newBlockId = bm.getOneEmptyBlockId()
             bm.setBlockFullById(newBlockId)
             toSaveInfoDirTable.push([dir, newBlockId, 1])
@@ -113,7 +113,7 @@ function exeRead(instruction) {
             }
         }
         else {
-            throw `'${dir}' does not exist in current Directory Table. i.e. the path to the file does not exist.`
+            throw `'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.`
         }
     }
 
@@ -136,7 +136,7 @@ function exeRead(instruction) {
             throw `Block number (${instruction.block}) in the instruction is larger than the file length.`
         }
     }
-
+    window.mainDirTable.renderToDirectoryView()
     renderMessage(message)
 }
 
@@ -158,7 +158,7 @@ function exeWrite(instruction) {
             }
         }
         else {
-            throw `'${dir}' does not exist in current Directory Table. i.e. the path to the file does not exist.`
+            throw `'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.`
         }
     }
 
@@ -181,10 +181,65 @@ function exeWrite(instruction) {
             throw `Block number (${instruction.block}) in the instruction is larger than the file length.`
         }
     }
-
+    window.mainDirTable.renderToDirectoryView()
     renderMessage(message)
 }
 
 function exeDelete(instruction) {
+    let dirs = splitDirectories(instruction.directory)
+    let toLookInfoDirTable = window.mainDirTable
+    let bm = BlockManager()
+    let message = "Look into Main Directory Table.\n"
 
+    for (const dir of dirs) {
+        if (toLookInfoDirTable.hasFileName(dir)) {
+            let nextDirTableBlockId = toLookInfoDirTable.getRowByFileName(dir)[1]
+            message += `According to current Directory Table, '${dir}' is at Block ${nextDirTableBlockId}.\n`
+            if (window.blockDirTables[nextDirTableBlockId]) {
+                message += `Look into Directory Table in Block '${nextDirTableBlockId}'.\n`
+                toLookInfoDirTable = window.blockDirTables[nextDirTableBlockId]
+            } else {
+                throw `Internal Error: Directory Table not found.`
+            }
+        }
+        else {
+            throw `'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.`
+        }
+    }
+
+    message = message.slice(0, -2) + `, which is the final Directory Table to look for the file information.\n`
+
+    if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
+        throw "File " + instruction.fileName + "does not exist in" + instruction.directory
+    }
+    else {
+        let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
+        let start = row[1]
+        let length = row[2]
+        if ((window.blockDirTables[start] == null) || (window.blockDirTables[start] == undefined)) {
+            // Is file
+            toLookInfoDirTable.removeByFileName(instruction.fileName)
+
+            let toDelete = []
+            for (let index = start; index < start + length; index++) {
+                toDelete.push(index)
+            }
+            bm.setBlocksEmptyByIdList(toDelete)
+
+            message += `According to the final Directory Table,` +
+                ` File ${instruction.fileName} begins at Block ${start}, which is deleted.`
+        }
+        else if (window.blockDirTables[start].length == 0) {
+            // Is empty directory
+            toLookInfoDirTable.removeByFileName(instruction.fileName)
+            bm.setBlockEmptyById(start)
+            message += `According to the final Directory Table,` +
+                ` Directory ${instruction.fileName} is at Block ${start}, which is deleted.`
+        } else {
+            // Is full directory
+            throw `Directory ${instruction.fileName} is not empty, thus the deleting request is denied.`
+        }
+    }
+    window.mainDirTable.renderToDirectoryView()
+    renderMessage(message)
 }

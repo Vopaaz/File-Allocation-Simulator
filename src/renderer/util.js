@@ -255,7 +255,8 @@ function initGeneralEnvironment() {
         window.toExecInstructionId = 0
         window.instructionInited = false
         window.blockDirTables = [];
-        window.mainDirTable = null;
+        window.mainDirTable = DirectoryTable(window.tableHead);
+        window.mainDirTable.renderToDirectoryView()
         let bm = BlockManager()
         for (let index = 0; index < 200; index++) {
             bm.setBlockEmptyById(index)
@@ -272,7 +273,7 @@ function initGeneralEnvironment() {
 
             renderRawInstructionTable()
 
-            window.mainDirTable = DirectoryTable(window.TableHead)
+            window.mainDirTable = DirectoryTable(window.tableHead)
             window.mainDirTable.renderToDirectoryView()
             renderMessage("Instructions are loaded.")
         }
