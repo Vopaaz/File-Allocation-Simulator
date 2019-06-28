@@ -134,8 +134,7 @@ function exeRead(instruction) {
 
     if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
         throw "File " + instruction.fileName + "does not exist in" + instruction.directory
-    }
-    else {
+    } else {
         let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
         let start = row[1]
         let length = row[2]

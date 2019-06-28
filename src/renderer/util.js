@@ -153,12 +153,12 @@ function BlockManager() {
             return this.getBlocksByIdList(ids)
         },
 
-        getNumbersDiscreteBlocksId: function(number){
+        getNumbersDiscreteBlocksId: function (number) {
             let arr = []
             for (let index = 0; index < 200; index++) {
-                if (this.blockIsEmptyById(index)){
+                if (this.blockIsEmptyById(index)) {
                     arr.push(index)
-                    if(arr.length == number){
+                    if (arr.length == number) {
                         return arr
                     }
                 }
@@ -166,7 +166,7 @@ function BlockManager() {
             throw "No sufficient blocks."
         },
 
-        getNumbersDiscreteBlocks: function(number){
+        getNumbersDiscreteBlocks: function (number) {
             return this.getBlocksByIdList(this.getNumbersDiscreteBlocksId(number))
         },
 
@@ -384,19 +384,23 @@ function Instruction(rawContentLine) {
             oprand: arr[3].trim()
         }
     } catch (error) {
-        throw "Invalid instruction: '" + contentLine + "'."
+        throw "<p>Invalid instruction: '" + contentLine + "'.</p>"
     }
 
     if (!instruction.directory.startsWith("root")) {
-        throw "Invalid instruction: '" + contentLine + "' \n The directory must starts with 'root'."
+        throw "<p>Invalid instruction: '" + contentLine + "' </p> <p>The directory must starts with 'root'.</p>"
+    }
+
+    if (instruction.block < 1) {
+        throw "<p>Invalid instruction: '" + contentLine + "' </p> <p>The block field is not an integer which is greater than 1.</p>"
     }
 
     if (isNaN(instruction.block) && instruction.oprand != "D") {
-        throw "Invalid instruction: '" + contentLine + "'. \nThe block field is not a valid integer."
+        throw "<p>Invalid instruction: '" + contentLine + "'.</p> <p>The block field is not a valid integer.</p>"
     }
 
     if (!inArray(["C", "R", "W", "D"], instruction.oprand)) {
-        throw "Invalid instruction: '" + contentLine + "'. \nThe oprand must be C, R, W, or D."
+        throw "<p>Invalid instruction: '" + contentLine + "'.</p> <p>The oprand must be C, R, W, or D.</p>"
     }
 
     return instruction

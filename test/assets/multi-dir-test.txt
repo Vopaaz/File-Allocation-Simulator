@@ -4,7 +4,9 @@ root/sub/next, file_3, 3, C
 root/sub/next/further, file_4, 4, C
 root/sub/next, file_5, 3, C
 root/sub, file_1, 2, W
+root/sub/next, file_5, 1, R
 root/sub/next, file_5, 2, R
+root/sub/next, file_5, 3, R
 root/sub, file_1, 2, D
 root/sub/next/further, file_4, 2, D
 root/sub/next, further, 1, D
