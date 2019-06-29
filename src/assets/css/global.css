@@ -3,33 +3,44 @@ h1, h2 {
     color: #625aac;
 }
 
+h3{
+    font-size: 14pt;
+    line-height: 14pt;
+    margin: 10px;
+}
+
 .left-section {
     width: 60%;
-    height: 800px;
+    height: 750px;
     border-right: 1px solid;
     float: left;
+    overflow: auto;
 }
 
 .right-section {
     width: 38%;
-    height: 800px;
+    height: 750px;
     float: right;
     border: 50px;
+    overflow: auto;
 }
 
 .raw-instructions-display{
-    height: 30%;
+    height: 25%;
     overflow: auto;
+    border: 0px;
 }
 
 .file-information-table{
-    height: 30%;
+    height: 20%;
     overflow: auto;
+    border: 0px;
 }
 
 .execution-message{
-    height: 40%;
+    height: 35%;
     overflow: auto;
+    border: 0px;
 }
 
 .reading-text{
@@ -37,5 +48,5 @@ h1, h2 {
 }
 
 .writing-text{
-    color: red;
+    color: gainsboro;
 }
