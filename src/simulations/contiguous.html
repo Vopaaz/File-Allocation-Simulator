@@ -9,35 +9,38 @@
 </head>
 
 <body>
+    <div class="container">
+        <div class="simu-title">
+            <h2>Contiguous Simulation</h2>
+        </div>
+        <div class="left-section">
 
-    <h2>Contiguous Simulation</h2>
+            <div class="block-board" id="block-board">
+                <script> for (let index = 0; index < 200; index++) {
+                        document.write('<div class="block-empty" id="block-' + index + '"> ' + index + '</div>');
+                    } </script>
+            </div>
 
-    <div class="left-section">
-
-        <div class="block-board" id="block-board">
-            <script> for (let index = 0; index < 200; index++) {
-                    document.write('<div class="block-empty" id="block-' + index + '"> ' + index + '</div>');
-                } </script>
+            <div class="button-board">
+                <button class="control-button" id="step">Step</button>
+                <button class="control-button" id="auto">Auto</button>
+                <button class="control-button" id="input">Select DataFile</button>
+            </div>
         </div>
 
-        <button class="control-button" id="step">Step</button>
-        <button class="control-button" id="auto">Auto</button>
-        <button class="control-button" id="input">Select DataFile</button>
-
-    </div>
-
-    <div class="right-section">
-        <h3> Instructions:</h3>
-        <div class="raw-instructions-display">
-            <div class="raw-instructions" id="raw-instructions"> </div>
-        </div>
-        <h3 id="file-infomation-table-title">File Information Table</h3>
-        <div class="file-information-table">
-            <div class="directory-table" id="directory-table"></div>
-        </div>
-        <h3> Messages:</h3>
-        <div class="execution-message">
-            <div class="messages" id="messages"></div>
+        <div class="right-section">
+            <h3> Instructions:</h3>
+            <div class="raw-instructions-display">
+                <div class="raw-instructions" id="raw-instructions"> </div>
+            </div>
+            <h3 id="file-infomation-table-title" class="clickable-h3">File Information Table</h3>
+            <div class="file-information-table">
+                <div class="directory-table" id="directory-table"></div>
+            </div>
+            <h3> Messages:</h3>
+            <div class="execution-message">
+                <div class="messages" id="messages"></div>
+            </div>
         </div>
     </div>
 
