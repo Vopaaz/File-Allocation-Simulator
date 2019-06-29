@@ -14,12 +14,20 @@
 }
 
 .maintitle {
-    line-height: 250px;
+    margin-top: 100px;
+    margin-bottom: 50px;
 }
 
-h1, h2, h3 {
-    font-family: Arial, Helvetica, sans-serif;
+h1, h2, h3, p {
     color: #113768;
+}
+
+h1, h2 {
+    font-family: Garamond, Arial, Helvetica, sans-serif;
+}
+
+p {
+    font-family: Helvetica, sans-serif;
 }
 
 h1 {
@@ -32,6 +40,7 @@ h2 {
 }
 
 h3 {
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14pt;
     line-height: 14pt;
     margin: 10px;
@@ -146,7 +155,7 @@ tbody td:hover:before {
     z-index: -1;
 }
 
-.clickable-h3:hover{
+.clickable-h3:hover {
     color: #04223f;
     font-weight: bolder;
     font-style: italic;

@@ -13,7 +13,7 @@ newContSimBtn.addEventListener('click', (event) => {
         }
     })
     win.maximize()
-    win.openDevTools()
+    // win.openDevTools()
     win.on('close', () => { win = null })
     win.loadURL(htmlPath)
     win.show()
@@ -28,7 +28,7 @@ newLinkedSimBtn.addEventListener('click', (event) => {
         }
     })
     win.maximize()
-    win.openDevTools()
+    // win.openDevTools()
     win.on('close', () => { win = null })
     win.loadURL(htmlPath)
     win.show()
@@ -44,7 +44,7 @@ newIndexedSimBtn.addEventListener('click', (event) => {
         }
     })
     win.maximize()
-    win.openDevTools()
+    // win.openDevTools()
     win.on('close', () => { win = null })
     win.loadURL(htmlPath)
     win.show()
