@@ -12,7 +12,7 @@ It's the course project (Additional Option) for Computer System Architechture, P
       - [Prerequisites](#Prerequisites)
       - [Install dependencies](#Install-dependencies)
       - [Run](#Run)
-      - [Known Problem](#Known-Problem)
+    - [Known Problem](#Known-Problem)
   - [Application Instruction](#Application-Instruction)
     - [Command Data File](#Command-Data-File)
       - [General](#General)
@@ -69,7 +69,7 @@ $ npm install
 $ npm start
 ```
 
-#### Known Problem
+### Known Problem
 
 This application does not have good resolution adaptation and monitor-size adaption. On different devices, the display may differ, and even prevent from normal using. You can try to set different resolution on your monitor but I do not guarantee the effect.
 
@@ -136,17 +136,17 @@ On main page, you can click the first three buttons to open a simulation window,
 
 ![Simulation Page](doc-img/simulation.png)
 
-The left part in the simulation page is the file blocks. The white ones are empty and the colored ones are full, either storing a file or is a index block in the indexed allocation simulation. If one file takes up several blocks, these blocks will have the same color.
+The left part in the simulation page is the file blocks. The white ones are empty and the colored ones are full, either storing a file/directory or is a index block in the indexed allocation simulation. If one file takes up several blocks, these blocks will have the same color.
 
 There are also three buttons at the bottom-left. `Step` will execute one instruction. `Auto` will automatically execute the instructions every 2 seconds. And the auto-execution will stop after you click it again. `Select Data File` will ask you to choose the source command file, which was discussed [above](#Command-Data-File).
 
 Note that the `Auto` button is the only "on-off" switch to the auto execution. That is, if you clicked `Auto`, finished one simulation, and uses the `Select Data File` to open another simulation. The second simulation **will automatically start**, unless you click the `Auto` button again.
 
-The right part will display the necessary information. `Instructions` lists the instructions in the data file.
+The right part will display the necessary information. 
 
-`File Information Table` part will be discussed in the next section.
-
-`Messages` tells you the detailed process of the execution of the command.
+- `Instructions` lists the instructions in the data file.
+- `File Information Table` part will be discussed in the next section.
+- `Messages` tells you the detailed process of the execution of the command.
 
 #### File Information Table
 
