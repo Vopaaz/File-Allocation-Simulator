@@ -3,6 +3,8 @@
 const { BrowserWindow } = require('electron').remote
 const { screen } = require('electron').remote
 const path = require('path')
+const shell = require('electron').shell;
+
 
 const newContSimBtn = document.getElementById('new-contiguous-simulation')
 newContSimBtn.addEventListener('click', (event) => {
@@ -48,4 +50,11 @@ newIndexedSimBtn.addEventListener('click', (event) => {
     win.on('close', () => { win = null })
     win.loadURL(htmlPath)
     win.show()
+})
+
+
+const docBtn = document.getElementById('documentation')
+docBtn.addEventListener('click', (event) => {
+    const htmlPath = path.join('https://github.com/Vopaaz/File-Allocation-Simulator/blob/master/README.md')
+    shell.openExternal(htmlPath)
 })

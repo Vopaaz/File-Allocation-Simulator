@@ -6,6 +6,7 @@
     left: 0px;
     background: linear-gradient(140deg, #fbf9ff, #f0f0ff, #eaf2fd);
     background-size: 100% 100%;
+    overflow: hidden;
 }
 
 .frontpage {
@@ -65,6 +66,10 @@ button:hover {
     text-decoration: none;
 }
 
+.mainbutton{
+    width: 10cm;
+}
+
 .button-board {
     text-align: center;
 }
@@ -74,7 +79,7 @@ button:hover {
 }
 
 .left-section {
-    width: 60%;
+    width: 55%;
     height: 750px;
     border-right: 1px solid;
     float: left;
@@ -82,7 +87,7 @@ button:hover {
 }
 
 .right-section {
-    width: 38%;
+    width: 43%;
     height: 750px;
     float: right;
     border: 50px;
@@ -105,6 +110,7 @@ button:hover {
     height: 35%;
     overflow: auto;
     border: 0px;
+    padding-right: 20px;
 }
 
 .reading-text {
