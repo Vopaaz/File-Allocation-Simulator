@@ -22,3 +22,11 @@
 .block-empty {
     background-color: white;
 }
+
+.reading-text {
+    color: white;
+}
+
+.writing-text {
+    color: gainsboro;
+}

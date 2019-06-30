@@ -3,7 +3,11 @@
 const { ipcRenderer } = require('electron')
 
 function BlockManager() {
+    // return an object with various functions which deals with the block coloring and rendering
+    // All the functions are named intuitively
+
     function randColor() {
+        // Return a random rgb color for coloring the file blocks
         let r = Math.random() * 100 + 60
         let g = Math.random() * 180 + 60
         let b = Math.random() * 180 + 60
@@ -11,7 +15,6 @@ function BlockManager() {
     }
 
     let bm = {
-
         getBlockById: function (id) {
             return document.getElementById('block-' + String(id))
         },
@@ -30,6 +33,8 @@ function BlockManager() {
         },
 
         setBlocksFull: function (blockList) {
+            // Not apply array.foreach on setBlockFull because they will be colored differently
+            // By default, this function colors the blocks in the list with the same color 
             let color = randColor()
             blockList.forEach(block => {
                 block.style.backgroundColor = color
@@ -250,6 +255,7 @@ function BlockManager() {
         },
 
         derenderBlock: function (block) {
+            // Detach a block with some index table / directory table rendered onto it
             if (block) {
                 let blockClone = block.cloneNode(true);
                 block.parentNode.replaceChild(blockClone, block);
@@ -270,6 +276,7 @@ function BlockManager() {
 }
 
 function initGeneralEnvironment() {
+    // Initialize general environment in the simulation window
     window.instructionInited = false
 
     const inputBtn = document.getElementById('input')
@@ -283,6 +290,7 @@ function initGeneralEnvironment() {
     })
 
     ipcRenderer.on('selected-file', (event, content) => {
+        // When select file button was clicked, clear everything caused by the last simulation
         window.instructions = null
         window.totalInstructions = 0
         window.toExecInstructionId = 0
@@ -300,6 +308,7 @@ function initGeneralEnvironment() {
         clearRawInstructionTable()
         renderMessage("")
 
+        // Try reading the input file and parse it into instructions
         try {
             let parser = InstructionParser(content)
             window.instructions = parser.instructions
@@ -346,6 +355,7 @@ function renderRawInstructionTable() {
 }
 
 function InstructionParser(content) {
+    // Parse the raw content in a file to several Instructions
     let lines = content.split("\n")
     let instructions = []
 
@@ -365,6 +375,8 @@ function InstructionParser(content) {
 }
 
 function Instruction(rawContentLine) {
+    // The constructor reads a line in the data file
+    // And return an Instruction object
     function charNumInString(string, char) {
         let count = 0
         for (const str_char of string) {
@@ -426,8 +438,8 @@ function Instruction(rawContentLine) {
 }
 
 function DirectoryTable(headTitleList) {
+    // The directory table object which provides useful functions dealing with directory table manipulation
     let dt = {
-
         headTitleList: headTitleList,
         cellArray: [],
 
@@ -465,6 +477,7 @@ function DirectoryTable(headTitleList) {
         },
 
         removeByFileName: function (file) {
+            // Remove one line in the table according to its first element
             this.cellArray.forEach(function (item, index, arr) {
                 if (item[0] == file) {
                     arr.splice(index, 1);
@@ -502,6 +515,7 @@ function DirectoryTable(headTitleList) {
         },
 
         renderToBlock: function (block) {
+            // When the block is clicked, the table will display in the right section
             if (block) {
                 block.addEventListener("click", (event) => {
                     if (BlockManager().blockIsFull(block)) {
@@ -522,6 +536,7 @@ function renderMessage(message) {
 }
 
 function splitDirectories(rawDirectory) {
+    // Split directories described in string into array
     let dirs = rawDirectory.trim().split("/")
 
     dirs.forEach(function (item, index, arr) {

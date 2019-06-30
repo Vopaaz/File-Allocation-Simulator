@@ -113,14 +113,6 @@ button:hover {
     padding-right: 20px;
 }
 
-.reading-text {
-    color: white;
-}
-
-.writing-text {
-    color: gainsboro;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;

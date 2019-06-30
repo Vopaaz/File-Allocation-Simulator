@@ -138,11 +138,13 @@ On main page, you can click the first three buttons to open a simulation window,
 
 The left part in the simulation page is the file blocks. The white ones are empty and the colored ones are full, either storing a file/directory or is a index block in the indexed allocation simulation. If one file takes up several blocks, these blocks will have the same color.
 
+When a block is being read, its number will become blinking white `R!`. When a block is being written, its number will become blinking `W!`.
+
 There are also three buttons at the bottom-left. `Step` will execute one instruction. `Auto` will automatically execute the instructions every 2 seconds. And the auto-execution will stop after you click it again. `Select Data File` will ask you to choose the source command file, which was discussed [above](#Command-Data-File).
 
 Note that the `Auto` button is the only "on-off" switch to the auto execution. That is, if you clicked `Auto`, finished one simulation, and uses the `Select Data File` to open another simulation. The second simulation **will automatically start**, unless you click the `Auto` button again.
 
-The right part will display the necessary information. 
+The right part will display the necessary information.
 
 - `Instructions` lists the instructions in the data file.
 - `File Information Table` part will be discussed in the next section.
@@ -215,8 +217,6 @@ Here `Index` stands for the block locations of this file.
 You can return to the main directory by clicking `File Information Table or Index Block` as well.
 
 ![Indexed Table](doc-img/indexed.gif)
-
-
 
 ## External Resources Used in the Project
 
