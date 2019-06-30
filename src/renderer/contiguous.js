@@ -109,28 +109,33 @@ function exeCreate(instruction) {
     renderMessage(message)
 }
 
-function exeRead(instruction) {
-    let dirs = splitDirectories(instruction.directory)
-    let toLookInfoDirTable = window.mainDirTable
-    let bm = BlockManager()
-    let message = "<p>Look into Main Directory Table.</p>"
-
+function locateToLookInfoTable(dirs) {
+    let toLookInfoDirTable = window.mainDirTable;
+    let message = "<p>Look into Main Directory Table.</p>";
     for (const dir of dirs) {
         if (toLookInfoDirTable.hasFileName(dir)) {
-            let nextDirTableBlockId = toLookInfoDirTable.getRowByFileName(dir)[1]
-            message += `<p>According to current Directory Table, '${dir}' is at Block ${nextDirTableBlockId}.</p>`
+            let nextDirTableBlockId = toLookInfoDirTable.getRowByFileName(dir)[1];
+            message += `<p>According to current Directory Table, '${dir}' is at Block ${nextDirTableBlockId}.</p>`;
             if (window.blockDirTables[nextDirTableBlockId]) {
-                message += `<p>Look into Directory Table in Block '${nextDirTableBlockId}'.</p>`
-                toLookInfoDirTable = window.blockDirTables[nextDirTableBlockId]
-            } else {
-                throw `Internal Error: Directory Table not found.`
+                message += `<p>Look into Directory Table in Block '${nextDirTableBlockId}'.</p>`;
+                toLookInfoDirTable = window.blockDirTables[nextDirTableBlockId];
             }
-        } else {
-            throw `<p>'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.</p>`
+            else {
+                throw `<p>Internal Error: Directory Table not found.</p>`;
+            }
+        }
+        else {
+            throw `<p>'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.</p>`;
         }
     }
+    message = message.slice(0, -5) + `, which is the final Directory Table to look for the file information.</p>`;
+    return { toLookInfoDirTable, message };
+}
 
-    message = message.slice(0, -5) + `, which is the final Directory Table to look for the file information.</p>`
+function exeRead(instruction) {
+    let bm = BlockManager()
+    let dirs = splitDirectories(instruction.directory)
+    let { toLookInfoDirTable, message } = locateToLookInfoTable(dirs);
 
     if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
         throw "File " + instruction.fileName + "does not exist in" + instruction.directory
@@ -153,26 +158,8 @@ function exeRead(instruction) {
 
 function exeWrite(instruction) {
     let dirs = splitDirectories(instruction.directory)
-    let toLookInfoDirTable = window.mainDirTable
     let bm = BlockManager()
-    let message = "<p>Look into Main Directory Table.</p>"
-
-    for (const dir of dirs) {
-        if (toLookInfoDirTable.hasFileName(dir)) {
-            let nextDirTableBlockId = toLookInfoDirTable.getRowByFileName(dir)[1]
-            message += `<p>According to current Directory Table, '${dir}' is at Block ${nextDirTableBlockId}.</p>`
-            if (window.blockDirTables[nextDirTableBlockId]) {
-                message += `<p>Look into Directory Table in Block '${nextDirTableBlockId}'.</p>`
-                toLookInfoDirTable = window.blockDirTables[nextDirTableBlockId]
-            } else {
-                throw `<p>Internal Error: Directory Table not found.</p>`
-            }
-        } else {
-            throw `<p>'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.</p>`
-        }
-    }
-
-    message = message.slice(0, -5) + `, which is the final Directory Table to look for the file information.</p>`
+    let { toLookInfoDirTable, message } = locateToLookInfoTable(dirs);
 
     if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
         throw "<p>File " + instruction.fileName + "does not exist in" + instruction.directory + "</p>"
@@ -196,26 +183,8 @@ function exeWrite(instruction) {
 
 function exeDelete(instruction) {
     let dirs = splitDirectories(instruction.directory)
-    let toLookInfoDirTable = window.mainDirTable
     let bm = BlockManager()
-    let message = "<p>Look into Main Directory Table.</p>"
-
-    for (const dir of dirs) {
-        if (toLookInfoDirTable.hasFileName(dir)) {
-            let nextDirTableBlockId = toLookInfoDirTable.getRowByFileName(dir)[1]
-            message += `<p>According to current Directory Table, '${dir}' is at Block ${nextDirTableBlockId}.</p>`
-            if (window.blockDirTables[nextDirTableBlockId]) {
-                message += `<p>Look into Directory Table in Block '${nextDirTableBlockId}'.</p>`
-                toLookInfoDirTable = window.blockDirTables[nextDirTableBlockId]
-            } else {
-                throw `<p>Internal Error: Directory Table not found.</p>`
-            }
-        } else {
-            throw `<p>'${dir}' does not exist in a certain Directory Table. i.e. the path to the file does not exist.</p>`
-        }
-    }
-
-    message = message.slice(0, -5) + `, which is the final Directory Table to look for the file information.</p>`
+    let { toLookInfoDirTable, message } = locateToLookInfoTable(dirs);
 
     if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
         throw "<p>File " + instruction.fileName + " does not exist in " + instruction.directory + "</p>"
