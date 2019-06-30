@@ -140,7 +140,7 @@ The left part in the simulation page is the file blocks. The white ones are empt
 
 There are also three buttons at the bottom-left. `Step` will execute one instruction. `Auto` will automatically execute the instructions every 2 seconds. And the auto-execution will stop after you click it again. `Select Data File` will ask you to choose the source command file, which was discussed [above](#Command-Data-File).
 
-Note that the `Auto` button is the only `on-off` switch to the execution. That is, if you clicked `Auto`, finished one simulation, and uses the `Select Data File` to open another simulation. The second simulation **will automatically start**, unless you click the `Auto` button again.
+Note that the `Auto` button is the only "on-off" switch to the auto execution. That is, if you clicked `Auto`, finished one simulation, and uses the `Select Data File` to open another simulation. The second simulation **will automatically start**, unless you click the `Auto` button again.
 
 The right part will display the necessary information. `Instructions` lists the instructions in the data file.
 
