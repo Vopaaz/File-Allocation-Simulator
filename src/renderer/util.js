@@ -195,7 +195,7 @@ function BlockManager() {
             setTimeout(() => {
                 clearInterval(timerId)
                 block.innerHTML = original_content
-            }, 1500)
+            }, 1700)
         },
 
         showBlockIsBeingReadById: function (id) {
@@ -235,7 +235,7 @@ function BlockManager() {
             setTimeout(() => {
                 clearInterval(timerId)
                 block.innerHTML = original_content
-            }, 2000);
+            }, 1700);
         },
 
         showBlockIsBeingWrittenById: function (id) {
