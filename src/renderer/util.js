@@ -120,7 +120,7 @@ function BlockManager() {
             if (id) {
                 return this.getBlockById(id)
             } else {
-                throw "All blocks are already full."
+                throw "<p>All blocks are already full.</p>"
             }
         },
 
@@ -130,7 +130,7 @@ function BlockManager() {
                     return index
                 }
             }
-            throw "All blocks are already full."
+            throw "<p>All blocks are already full.</p>"
         },
 
         getNumbersContinuousBlocksId: function (number) {
@@ -401,7 +401,7 @@ function Instruction(rawContentLine) {
     let contentLine = rawContentLine.trim()
 
     if (charNumInString(contentLine, ",") != 3) {
-        throw "Invalid instruction: '" + contentLine + "'. \nThe commas(separators) in the instruction data file are not placed properly."
+        throw "<p>Invalid instruction: '" + contentLine + "'. \nThe commas(separators) in the instruction data file are not placed properly.</p>"
     }
 
     let arr = contentLine.split(",")
@@ -475,7 +475,7 @@ function DirectoryTable(headTitleList) {
                 this.cellArray.push(contentList)
             }
             else {
-                throw "Internal Error, directory table received push request whose array length is inconsistant with the head"
+                throw "<p>Internal Error, directory table received push request whose array length is inconsistant with the head.</p>"
             }
         },
 

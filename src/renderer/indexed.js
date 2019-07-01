@@ -175,7 +175,7 @@ function exeRead(instruction) {
     let { toLookInfoDirTable, message } = locateToLookInfoTable(dirs);
 
     if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
-        throw "File " + instruction.fileName + "does not exist in" + instruction.directory
+        throw "<p>File " + instruction.fileName + "does not exist in" + instruction.directory+".</p>"
     } else {
         let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
         let indexBlockId = row[1]
@@ -201,7 +201,7 @@ function exeWrite(instruction) {
     let { toLookInfoDirTable, message } = locateToLookInfoTable(dirs);
 
     if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
-        throw "File " + instruction.fileName + "does not exist in" + instruction.directory
+        throw "<p>File " + instruction.fileName + "does not exist in" + instruction.directory+".</p>"
     } else {
         let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
         let indexBlockId = row[1]
@@ -228,7 +228,7 @@ function exeDelete(instruction) {
     let { toLookInfoDirTable, message } = locateToLookInfoTable(dirs);
 
     if (!toLookInfoDirTable.hasFileName(instruction.fileName)) {
-        throw "File " + instruction.fileName + "does not exist in" + instruction.directory
+        throw "<p>File " + instruction.fileName + "does not exist in" + instruction.directory+".</p>"
     } else {
         let row = toLookInfoDirTable.getRowByFileName(instruction.fileName)
         let indexBlockId = row[1]

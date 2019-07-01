@@ -18,7 +18,7 @@ class InstructionsCreator(object):
 
     def generate_random_oprand(self, avoid=[]):
         while True:
-            op = random.choice(["R", "W", "C", "D"] + ["D"])
+            op = random.choice(["R", "W", "C", "D"]*7 + ["D"])
             # Make "D" slightly more than "C" to avoid overflow
             if op not in avoid:
                 return op
@@ -58,7 +58,8 @@ class InstructionsCreator(object):
             "file": l[1],
             "block": l[2]
         }, index=[0])
-        self.files = pd.concat([self.files, l_df], axis=0)
+        self.files = pd.concat(
+            [self.files, l_df], axis=0).reset_index(drop=True)
 
     def create_file(self):
         dir_ = self.generate_random_dir()
