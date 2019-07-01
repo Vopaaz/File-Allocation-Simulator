@@ -87,6 +87,8 @@ function exeCreate(instruction) {
                 throw `<p>There is a file with the same name as the directory '${dir}', which causes conflict.</p>`
             }
         } else {
+            // Comparing with contiguous and linked simulation, indexed simulation needs to
+            // create an index block besides a general directory block
             message += `<p>'${dir}' not found in current Directory Table.</p>`
 
             let newIndex = DirectoryTable(window.blockIndexTableHead)

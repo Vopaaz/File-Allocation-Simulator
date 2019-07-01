@@ -46,7 +46,8 @@ function exeCreate(instruction){
 }
 
 function locateToLookInfoTable(dirs){
-    // Locate the file information table which contains the wanted file and initialize the message.
+    // Locate the file information table which contains the wanted file and initialize the message
+    // by iteratively follow the path and look into different layers of directory tables, starting from the main one.
 }
 
 function exeRead(instruction){

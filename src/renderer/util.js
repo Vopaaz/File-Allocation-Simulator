@@ -284,6 +284,7 @@ function initGeneralEnvironment() {
         ipcRenderer.send('open-file-dialog')
     })
 
+    // When the "File Information Table" is clicked, display the main directory table
     const fileInfoTblTitle = document.getElementById("file-infomation-table-title")
     fileInfoTblTitle.addEventListener('click', (event) => {
         window.mainDirTable.renderToDirectoryView()
@@ -334,6 +335,7 @@ function clearRawInstructionTable() {
 }
 
 function renderRawInstructionTable() {
+    // Display the instructions from the data file onto the top-right section on the simulation page
     function tdWrapper(content) {
         return "<td>" + content + "</td>"
     }
@@ -444,6 +446,7 @@ function DirectoryTable(headTitleList) {
         cellArray: [],
 
         toHtmlElement: function () {
+            // Return a DOM table object representing the current status of the directory table
             let tableElement = document.createElement("table")
             let headRowTrElement = document.createElement("tr")
             this.headTitleList.forEach((headTitle) => {
@@ -532,6 +535,7 @@ function DirectoryTable(headTitleList) {
 }
 
 function renderMessage(message) {
+    // Display the message in the bottom-right section in the simulation page
     document.getElementById("messages").innerHTML = message;
 }
 
