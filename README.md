@@ -12,7 +12,6 @@ It's the course project (Additional Option) for Computer System Architechture, P
       - [Prerequisites](#Prerequisites)
       - [Install dependencies](#Install-dependencies)
       - [Run](#Run)
-    - [Known Problem](#Known-Problem)
   - [Application Instruction](#Application-Instruction)
     - [Command Data File](#Command-Data-File)
       - [General](#General)
@@ -24,6 +23,7 @@ It's the course project (Additional Option) for Computer System Architechture, P
         - [In Contiguous Simulation](#In-Contiguous-Simulation)
         - [In Linked Simulation](#In-Linked-Simulation)
         - [In Indexed Simulation](#In-Indexed-Simulation)
+  - [Known Problems](#Known-Problems)
   - [External Resources Used in the Project](#External-Resources-Used-in-the-Project)
 
 
@@ -69,11 +69,6 @@ $ npm install
 ```bash
 $ npm start
 ```
-
-### Known Problem
-
-This application does not have good resolution adaptation and monitor-size adaption. On different devices, the display may differ, and even prevent from normal using. You can try to set different resolution on your monitor but I do not guarantee the effect.
-
 
 ## Application Instruction
 
@@ -128,7 +123,21 @@ The file `File Name` which locates in `Directory` will be deleted. Note that the
 
 #### Data File Generator
 
+A very simple python script was provided to generate random data file for testing.
 
+- Environment: `Python 3.7`
+- Dependencies: `pandas`, you can install by `pip install pandas`
+
+Running:
+
+```bash
+$ python test/scripts/generate.py NUMBER
+```
+
+- Argument `NUMBER` is the number of instructions generated.
+- It should either be an integer greater than 1, or omitted, where the script will generate 20 instructions.
+
+The instruction file will be created at `test/assets/random-tests`, named with current time.
 
 ### Main Page
 
@@ -221,6 +230,13 @@ Here `Index` stands for the block locations of this file.
 You can return to the main directory by clicking `File Information Table or Index Block` as well.
 
 ![Indexed Table](doc-img/indexed.gif)
+
+
+## Known Problems
+
+1. This application does not have good resolution adaptation and monitor-size adaption. On different devices, the display may differ, and even prevent from normal using. You can try to set different resolution on your monitor but I do not guarantee the effect.
+2. If you click the `Step` button too fast, the `R!` or `W!` words may stay on the panel rather than returning back to the block number.
+
 
 ## External Resources Used in the Project
 

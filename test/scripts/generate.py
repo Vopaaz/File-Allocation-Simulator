@@ -4,7 +4,6 @@ import sys
 import os
 import string
 import pandas as pd
-import pysnooper
 
 
 class InstructionsCreator(object):
