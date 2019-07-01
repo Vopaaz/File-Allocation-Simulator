@@ -1,8 +1,8 @@
-# Silumation-js-comments
+# Simulation-js-comments
 
 The requirements of the project contains "sufficient inline comments", however, `contiguous.js`, `indexed.js`, `linked.js` have identical basic structure. It would be wasteful if three sets of indentical comment strings appear in those files. Thus, this document will state the common parts, and leave the inline comments to state the algorithm-specific part.
 
-- [Silumation-js-comments](#Silumation-js-comments)
+- [Simulation-js-comments](#Simulation-js-comments)
   - [Code Structure](#Code-Structure)
   - [Data Structure](#Data-Structure)
 
