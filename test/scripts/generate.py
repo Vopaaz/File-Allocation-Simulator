@@ -18,7 +18,8 @@ class InstructionsCreator(object):
 
     def generate_random_oprand(self, avoid=[]):
         while True:
-            op = random.choice(["R", "W", "C", "D"])
+            op = random.choice(["R", "W", "C", "D"] + ["D"])
+            # Make "D" slightly more than "C" to avoid overflow
             if op not in avoid:
                 return op
 
@@ -31,7 +32,7 @@ class InstructionsCreator(object):
             return root
         else:
             full_dir = "/".join([root, *[self.generate_random_string()
-                                         for _ in range(random.randint(1, 3))]])
+                                         for _ in range(random.randint(1, 2))]])
             return full_dir
 
     def generate_instructions(self, row_number):
@@ -78,10 +79,13 @@ class InstructionsCreator(object):
             [root_file.dir, root_file.file, str(random.randint(1, root_file.block)), "W"]) + "\n")
 
     def delete_file(self):
-        to_pop = self.files.sample(1).iloc[0]
-        self.files.drop(axis=0, index=to_pop.name, inplace=True)
-        self.f.write(",".join(
-            [to_pop.dir, to_pop.file, str(to_pop.block), "D"]) + "\n")
+        if self.files.empty:
+            pass
+        else:
+            to_pop = self.files.sample(1).iloc[0]
+            self.files.drop(axis=0, index=to_pop.name, inplace=True)
+            self.f.write(",".join(
+                [to_pop.dir, to_pop.file, str(to_pop.block), "D"]) + "\n")
 
 
 if __name__ == "__main__":

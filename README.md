@@ -17,6 +17,7 @@ It's the course project (Additional Option) for Computer System Architechture, P
     - [Command Data File](#Command-Data-File)
       - [General](#General)
       - [Operation codes](#Operation-codes)
+      - [Data File Generator](#Data-File-Generator)
     - [Main Page](#Main-Page)
     - [Simulation Page](#Simulation-Page)
       - [File Information Table](#File-Information-Table)
@@ -124,6 +125,9 @@ The No. `Blocks` block of file `File Name` which locates in `Directory` will be 
 - `D` stands for delete.
 
 The file `File Name` which locates in `Directory` will be deleted. Note that the `Block` field in this command will be **ignored** according to the instruction of Prof. Mao. The **whole** file will be deleted whatever the `Block` field is, instead of deleting only the No. `Block` block.
+
+#### Data File Generator
+
 
 
 ### Main Page

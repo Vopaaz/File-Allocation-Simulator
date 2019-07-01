@@ -8,7 +8,7 @@ function BlockManager() {
 
     function randColor() {
         // Return a random rgb color for coloring the file blocks
-        let r = Math.random() * 100 + 60
+        let r = Math.random() * 180 + 60
         let g = Math.random() * 180 + 60
         let b = Math.random() * 180 + 60
         return `rgba(${r},${g},${b},0.7)`
@@ -150,7 +150,7 @@ function BlockManager() {
                     return arr
                 }
             }
-            throw "No sufficient blocks."
+            throw "<p>No sufficient blocks.</p>"
         },
 
         getNumbersContinuousBlocks: function (number) {
@@ -168,7 +168,7 @@ function BlockManager() {
                     }
                 }
             }
-            throw "No sufficient blocks."
+            throw "<p>No sufficient blocks.</p>"
         },
 
         getNumbersDiscreteBlocks: function (number) {
